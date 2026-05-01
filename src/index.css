@@ -1,11 +1,16 @@
-@import "./vendor/normalize.css";
-@import "./vendor/fonts.css";
-@import "./App.css";
-@import "./blocks/page.css";
-@import "./blocks/header.css";
-@import "./blocks/profile.css";
-@import "./blocks/content.css";
-@import "./blocks/footer.css";
-@import "./blocks/popup.css";
-@import "./blocks/register.css";
-@import "./blocks/login.css";
+@import "./styles/tokens.css";
+@import "./styles/base.css";
+@import "./styles/utilities.css";
+@import "./styles/animations.css";
+
+@import "./styles/blocks/button.css";
+@import "./styles/blocks/section.css";
+@import "./styles/blocks/card.css";
+@import "./styles/blocks/navbar.css";
+@import "./styles/blocks/hero.css";
+@import "./styles/blocks/features.css";
+@import "./styles/blocks/how.css";
+@import "./styles/blocks/cta.css";
+@import "./styles/blocks/footer.css";
+@import "./styles/blocks/swipe.css";
+@import "./styles/blocks/notfound.css";

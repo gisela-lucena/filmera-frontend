@@ -1,4 +1,4 @@
-import logo from "../images/filmera-logo.png";
+import logo from "../assets/filmera-logo.png";
 import { Button } from "./ui/Button";
 
 const CTA = () => (

@@ -1,4 +1,4 @@
-import logo from "../images/filmera-logo.png";
+import logo from "../asssets/filmera-logo.png";
 
 const Footer = () => (
   <footer className="footer">

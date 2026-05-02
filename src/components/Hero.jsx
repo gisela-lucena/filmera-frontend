@@ -1,7 +1,7 @@
 import { Play, Sparkles } from "lucide-react";
 import couple from "../assets/hero-couple.jpg";
 import logo from "../assets/filmera-logo.png";
-import { Button } from "../ui/Button";
+import { Button } from "./ui/Button";
 
 const Hero = () => (
     <section className="hero">

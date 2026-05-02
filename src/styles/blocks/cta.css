@@ -1,0 +1,60 @@
+.cta {
+  position: relative;
+  overflow: hidden;
+  border-radius: 1.5rem;
+  background: var(--gradient-card);
+  border: 1px solid rgb(255 255 255 / 0.1);
+  padding: 2.5rem;
+  box-shadow: var(--shadow-elegant);
+  text-align: center;
+}
+@media (min-width: 768px) {
+  .cta {
+    padding: 4rem;
+  }
+}
+.cta__blob1 {
+  position: absolute;
+  top: -5rem;
+  left: -5rem;
+  width: 18rem;
+  height: 18rem;
+  border-radius: 9999px;
+  background: hsl(var(--primary) / 0.3);
+  filter: blur(64px);
+}
+.cta__blob2 {
+  position: absolute;
+  bottom: -5rem;
+  right: -5rem;
+  width: 18rem;
+  height: 18rem;
+  border-radius: 9999px;
+  background: hsl(var(--accent) / 0.2);
+  filter: blur(64px);
+}
+.cta__logo {
+  position: relative;
+  margin: 0 auto 1.5rem;
+  width: 5rem;
+}
+.cta__h2 {
+  position: relative;
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 800;
+  margin-bottom: 1rem;
+}
+.cta__lead {
+  position: relative;
+  font-size: 1.125rem;
+  color: hsl(var(--muted-foreground));
+  max-width: 36rem;
+  margin: 0 auto 2rem;
+}
+.cta__actions {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem;
+}

@@ -16,7 +16,6 @@ const Index = () => (
         <HowItWorks />
         <Features />
         <SwipeDemo />
-        <Movies />
         <CTA />
         <Footer />
     </main>

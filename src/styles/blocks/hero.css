@@ -31,7 +31,7 @@
   background: rgb(255 255 255 / 0.05);
   border: 1px solid rgb(255 255 255 / 0.1);
   font-size: 0.75rem;
-  font-weight: 500;
+  font-weight: 800;
   color: hsl(var(--accent));
   margin-bottom: 1.5rem;
 }

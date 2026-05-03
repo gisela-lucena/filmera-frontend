@@ -8,11 +8,11 @@ const Footer = () => (
         <strong>FILM<span className="footer__accent">ERA</span></strong>
         <span className="footer__year">© {new Date().getFullYear()}</span>
       </div>
-      <div className="footer__links">
+      {/* <div className="footer__links">
         <a href="#">Privacy</a>
         <a href="#">Terms</a>
         <a href="#">Contact</a>
-      </div>
+      </div> */}
       <p>Movie data by TMDB</p>
     </div>
   </footer>

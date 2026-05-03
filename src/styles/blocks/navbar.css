@@ -36,6 +36,7 @@
   display: none;
   gap: 2rem;
   font-size: 0.875rem;
+  font-weight: 800;
   color: hsl(var(--muted-foreground));
 }
 .navbar__links a {

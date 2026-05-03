@@ -1,0 +1,181 @@
+.swipe__deck {
+  position: relative;
+  max-width: 24rem;
+  margin: 0 auto;
+  height: 520px;
+}
+.swipe__peek {
+  position: absolute;
+  inset: 0;
+  border-radius: 1.5rem;
+  transform: scale(0.95);
+  opacity: 0.6;
+  box-shadow: var(--shadow-card);
+}
+.swipe__card {
+  position: absolute;
+  inset: 0;
+  border-radius: 1.5rem;
+  box-shadow: var(--shadow-elegant);
+  border: 1px solid rgb(255 255 255 / 0.1);
+  overflow: hidden;
+}
+.swipe__emoji {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font-size: 8rem;
+  opacity: 0.4;
+}
+.swipe__fade {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    rgb(0 0 0 / 0.8),
+    rgb(0 0 0 / 0.2) 50%,
+    transparent
+  );
+}
+.swipe__info {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 1.5rem;
+  color: white;
+}
+.swipe__meta {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  color: rgb(255 255 255 / 0.8);
+  margin-bottom: 0.25rem;
+}
+.swipe__meta svg {
+  width: 1rem;
+  height: 1rem;
+  fill: hsl(var(--accent));
+  color: hsl(var(--accent));
+}
+.swipe__title {
+  font-size: 1.875rem;
+  font-weight: 800;
+  margin-bottom: 0.25rem;
+}
+.swipe__genre {
+  color: rgb(255 255 255 / 0.8);
+  font-size: 0.875rem;
+}
+
+.swipe__badge {
+  position: absolute;
+  top: 1.5rem;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  border-width: 4px;
+  border-style: solid;
+  font-weight: 800;
+  font-size: 1.5rem;
+}
+.swipe__badge--like {
+  left: 1.5rem;
+  color: hsl(var(--like));
+  border-color: hsl(var(--like));
+  transform: rotate(-12deg);
+}
+.swipe__badge--nope {
+  right: 1.5rem;
+  color: hsl(var(--dislike));
+  border-color: hsl(var(--dislike));
+  transform: rotate(12deg);
+}
+
+.swipe__match {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  border-radius: 1.5rem;
+  background: hsl(var(--background) / 0.9);
+  backdrop-filter: blur(20px);
+  border: 1px solid hsl(var(--accent) / 0.4);
+  display: grid;
+  place-items: center;
+  padding: 1.5rem;
+  text-align: center;
+  box-shadow: var(--shadow-accent-glow);
+}
+.swipe__match-emoji {
+  font-size: 3.75rem;
+  margin-bottom: 0.75rem;
+}
+.swipe__match-label {
+  color: hsl(var(--accent));
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+}
+.swipe__match-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+.swipe__match-text {
+  color: hsl(var(--muted-foreground));
+  font-size: 0.875rem;
+  margin-bottom: 1.5rem;
+}
+
+.swipe__controls {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+  margin-top: 2.5rem;
+}
+.swipe__fab {
+  width: 4rem;
+  height: 4rem;
+  border-radius: 9999px;
+  display: grid;
+  place-items: center;
+  box-shadow: var(--shadow-card);
+  transition: var(--transition-smooth);
+  border: 1px solid rgb(255 255 255 / 0.1);
+}
+.swipe__fab:hover {
+  transform: scale(1.1);
+}
+.swipe__fab svg {
+  width: 1.75rem;
+  height: 1.75rem;
+}
+.swipe__fab--skip {
+  background: var(--gradient-card);
+  color: hsl(var(--dislike));
+}
+.swipe__fab--like {
+  background: var(--gradient-accent);
+  color: hsl(var(--accent-foreground));
+  box-shadow: var(--shadow-accent-glow);
+  border: none;
+}
+.swipe__fab--like svg {
+  fill: currentColor;
+}
+
+.swipe__g--indigo {
+  background: linear-gradient(135deg, #4338ca, #581c87);
+}
+.swipe__g--pink {
+  background: linear-gradient(135deg, #db2777, #6b21a8);
+}
+.swipe__g--slate {
+  background: linear-gradient(135deg, #334155, #2e1065);
+}
+.swipe__g--rose {
+  background: linear-gradient(135deg, #f43f5e, #6d28d9);
+}
+.swipe__g--fuchsia {
+  background: linear-gradient(135deg, #c026d3, #581c87);
+}

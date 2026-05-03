@@ -6,6 +6,7 @@ import Features from "../components/Features";
 import SwipeDemo from "../components/SwipeDemo";
 import CTA from "../components/CTA";
 import Footer from "../components/Footer";
+import Movies from "../components/Movies";
 
 const Index = () => (
     <main className="page">
@@ -15,6 +16,7 @@ const Index = () => (
         <HowItWorks />
         <Features />
         <SwipeDemo />
+        <Movies />
         <CTA />
         <Footer />
     </main>

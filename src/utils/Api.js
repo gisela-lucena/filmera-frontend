@@ -1,88 +1,61 @@
 class Api {
-  constructor({ baseUrl, headers }) {
+  constructor({ baseUrl, token }) {
     this._baseUrl = baseUrl;
-    this._headers = headers;
+    this._token = token;
   }
 
   _handleServerResponse(res) {
     if (res.ok) {
-      return res.json().then((payload) => payload?.data ?? payload);
+      return res.json();
     }
 
     return Promise.reject(new Error(`Error: ${res.status}`));
   }
 
-  _request(url, options = {}) {
-    return fetch(`${this._baseUrl}${url}`, {
-      headers: this._headers,
+  _request(endpoint, options = {}) {
+    return fetch(`${this._baseUrl}${endpoint}`, {
+      headers: {
+        accept: "application/json",
+        Authorization: `Bearer ${this._token}`,
+        ...options.headers,
+      },
       ...options,
     }).then(this._handleServerResponse);
   }
 
-  getInitialData() {
-    return Promise.all([this.getUser(), this.getInitialCards()]);
+  getPopularMovies() {
+    return this._request("/movie/popular?language=en-US&page=1");
   }
 
-  getUser() {
-    return this._request("/users/me");
+  getTopRatedMovies() {
+    return this._request("/movie/top_rated?language=en-US&page=1");
   }
 
-  getInitialCards() {
-    return this._request("/cards");
+  getGenres() {
+    return this._request("/genre/movie/list?language=en-US");
   }
 
-  setUserInfo(name, about) {
-    return this._request("/users/me", {
-      method: "PATCH",
-      body: JSON.stringify({ name, about }),
-    });
+  getMoviesByGenre(genreId) {
+    return this._request(
+      `/discover/movie?with_genres=${genreId}&language=en-US&page=1`,
+    );
   }
 
-  addNewCard(name, link) {
-    return this._request("/cards", {
-      method: "POST",
-      body: JSON.stringify({ name, link }),
-    });
+  getMoviesByGenreAndYear(genreId, year, page = 1) {
+    return this._request(
+      `/discover/movie?language=en-US&page=${page}&with_genres=${genreId}&primary_release_year=${year}`,
+    );
   }
 
-  deleteCard(cardId) {
-    return this._request(`/cards/${cardId}`, {
-      method: "DELETE",
-    });
-  }
-
-  likeCard(cardId) {
-    return this._request(`/cards/${cardId}/likes`, {
-      method: "PUT",
-    });
-  }
-
-  unlikeCard(cardId) {
-    return this._request(`/cards/${cardId}/likes`, {
-      method: "DELETE",
-    });
-  }
-
-  changeLikeCardStatus(cardId, isLiked) {
-    return isLiked ? this.likeCard(cardId) : this.unlikeCard(cardId);
-  }
-
-  updateAvatar(avatarLink) {
-    return this._request("/users/me/avatar", {
-      method: "PATCH",
-      body: JSON.stringify({ avatar: avatarLink }),
-    });
+  getMovieDetails(movieId) {
+    return this._request(`/movie/${movieId}?language=en-US`);
   }
 }
 
-const TOKEN = import.meta.env.VITE_TMDB_TOKEN;
 const api = new Api({
   baseUrl:
     import.meta.env.VITE_TMDB_API_BASE_URL || "https://api.themoviedb.org/3",
-  headers: {
-    accept: "application/json",
-    Authorization: `Bearer ${TOKEN}`,
-  },
+  token: import.meta.env.VITE_TMDB_TOKEN,
 });
 
 export default api;

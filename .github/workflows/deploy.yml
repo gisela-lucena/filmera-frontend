@@ -15,7 +15,8 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+  VITE_TMDB_TOKEN: ${{ secrets.VITE_TMDB_TOKEN }}
+  VITE_TMDB_API_BASE_URL: https://api.themoviedb.org/3
 
 jobs:
   build:

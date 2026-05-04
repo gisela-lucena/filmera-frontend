@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import { Heart, Star, X } from "lucide-react";
-import { Button } from "./ui/Button";
+import { Button } from "../ui/Button";
 
 const MOVIES = [
     { title: "Inception", year: 2010, genre: "Sci-Fi • Thriller", rating: 8.8, gradient: "swipe__g--indigo", emoji: "🌀" },

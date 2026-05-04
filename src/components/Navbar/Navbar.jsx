@@ -1,5 +1,5 @@
-import logo from "../assets/filmera-logo.png";
-import { Button } from "../components/ui/Button";
+import logo from "../../images/filmera-logo.png";
+import { Button } from "../ui/Button";
 
 const Navbar = () => (
     <header className="navbar">

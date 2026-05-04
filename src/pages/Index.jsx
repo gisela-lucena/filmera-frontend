@@ -1,11 +1,11 @@
-import Navbar from "../components/Navbar";
-import Hero from "../components/Hero";
-import Problem from "../components/Problem";
-import HowItWorks from "../components/HowItWorks";
-import Features from "../components/Features";
-import SwipeDemo from "../components/SwipeDemo";
-import CTA from "../components/CTA";
-import Footer from "../components/Footer";
+import Navbar from "../components/Navbar/Navbar";
+import Hero from "../components/Hero/Hero";
+import Problem from "../components/Problem/Problem";
+import HowItWorks from "../components/HowItWorks/HowItWorks";
+import Features from "../components/Features/Features";
+import SwipeDemo from "../components/SwipeDemo/SwipeDemo";
+import CTA from "../components/CTA/CTA";
+import Footer from "../components/Footer/Footer";
 import Movies from "../components/Movies";
 
 const Index = () => (

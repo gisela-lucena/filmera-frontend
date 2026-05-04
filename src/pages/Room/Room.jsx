@@ -5,6 +5,7 @@ import { Button } from "../../components/ui/Button";
 import "./room.css";
 import api from "../../utils/Api.js";
 
+
 const IMG = "https://image.tmdb.org/t/p/w500";
 
 const GENRES = [
@@ -39,11 +40,6 @@ export default function Room() {
     const { code: urlCode } = useParams();
     const navigate = useNavigate();
 
-    // Stages: "lobby" (no code) -> create or join
-    // "config" -> host picks filters
-    // "waiting" -> waiting for participants
-    // "swiping" -> swipe deck
-    // "matched" -> a match!
     const [stage, setStage] = useState(urlCode ? "joining" : "lobby");
     const [code, setCode] = useState(urlCode || "");
     const [joinInput, setJoinInput] = useState("");
@@ -56,8 +52,7 @@ export default function Room() {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
 
-    // Filters (host)
-    const [selectedGenres, setSelectedGenres] = useState([]);
+       const [selectedGenres, setSelectedGenres] = useState([]);
     const [year, setYear] = useState("any");
     const [sort, setSort] = useState("popularity.desc");
 
@@ -101,13 +96,13 @@ export default function Room() {
                 setMatched(null);
                 setStage("swiping");
             } else if (type === "swipe") {
-                // payload: { userId, movieId, liked }
+                
                 if (room.host === me) {
                     room.swipes = room.swipes || {};
                     room.swipes[payload.movieId] = room.swipes[payload.movieId] || {};
                     room.swipes[payload.movieId][payload.userId] = payload.liked;
                     saveRoom(code, room);
-                    // Check match: every participant liked
+                 
                     const likes = room.swipes[payload.movieId];
                     if (room.participants.every((p) => likes[p] === true)) {
                         const movie = (room.movies || []).find((m) => m.id === payload.movieId);

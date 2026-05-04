@@ -1,22 +1,38 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Heart, Star, X } from "lucide-react";
 import { Button } from "../ui/Button";
+import api from "../../utils/Api.js";
 
-const MOVIES = [
-    { title: "Inception", year: 2010, genre: "Sci-Fi • Thriller", rating: 8.8, gradient: "swipe__g--indigo", emoji: "🌀" },
-    { title: "La La Land", year: 2016, genre: "Romance • Musical", rating: 8.0, gradient: "swipe__g--pink", emoji: "🎷" },
-    { title: "Interstellar", year: 2014, genre: "Sci-Fi • Drama", rating: 8.7, gradient: "swipe__g--slate", emoji: "🚀" },
-    { title: "The Grand Budapest Hotel", year: 2014, genre: "Comedy • Drama", rating: 8.1, gradient: "swipe__g--rose", emoji: "🛎️" },
-    { title: "Spirited Away", year: 2001, genre: "Animation • Fantasy", rating: 8.6, gradient: "swipe__g--fuchsia", emoji: "🐉" },
-];
+const IMG = "https://image.tmdb.org/t/p/w500";
 
 const SwipeDemo = () => {
+    const [movies, setMovies] = useState([]);
     const [index, setIndex] = useState(0);
     const [direction, setDirection] = useState(null);
     const [matched, setMatched] = useState(null);
 
-    const movie = MOVIES[index % MOVIES.length];
-    const next = MOVIES[(index + 1) % MOVIES.length];
+    useEffect(() => {
+        async function fetchMovies() {
+            try {
+                const data = await api.getPopularMovies();
+                const list = (data.results || []).slice(0, 10).map((m) => ({
+                    id: m.id,
+                    title: m.title,
+                    year: (m.release_date || "").slice(0, 4),
+                    rating: m.vote_average?.toFixed(1),
+                    overview: m.overview,
+                    poster: m.poster_path ? `${IMG}${m.poster_path}` : null,
+                }));
+                setMovies(list);
+            } catch (error) {
+                console.error("Error loading SwipeDemo movies:", error);
+            }
+        }
+        fetchMovies();
+    }, []);
+
+    const movie = movies.length ? movies[index % movies.length] : null;
+    const next = movies.length ? movies[(index + 1) % movies.length] : null;
 
     const swipe = (dir) => {
         setDirection(dir);
@@ -44,39 +60,58 @@ const SwipeDemo = () => {
             </div>
 
             <div className="swipe__deck">
-                <div className={`swipe__peek ${next.gradient}`} />
-                <div
-                    className={`swipe__card ${movie.gradient} ${direction === "left" ? "animate-swipe-left" : direction === "right" ? "animate-swipe-right" : ""
-                        }`}
-                >
-                    <div className="swipe__emoji">{movie.emoji}</div>
-                    <div className="swipe__fade" />
-                    {overlayBadge}
-                    <div className="swipe__info">
-                        <div className="swipe__meta"><Star /> {movie.rating} • {movie.year}</div>
-                        <h3 className="swipe__title">{movie.title}</h3>
-                        <p className="swipe__genre">{movie.genre}</p>
+                {movie && (
+                    <div
+                        className={`swipe__card ${direction === "left"
+                            ? "animate-swipe-left"
+                            : direction === "right"
+                                ? "animate-swipe-right"
+                                : ""
+                            }`} >
+                        {movie.poster ? (
+                            <img src={movie.poster} alt={movie.title} />
+                        ) : (
+                            <div className="swipe__emoji">🎬</div>
+                        )}
+                        <div className="swipe__fade" />
+                        {overlayBadge}
+                        <div className="swipe__info">
+                            <div className="swipe__meta">
+                                <Star /> {movie.rating} • {movie.year}
+                            </div>
+                            <h3 className="swipe__title">{movie.title}</h3>
+                            <p className="swipe__genre">{movie.genre}</p>
+                        </div>
                     </div>
-                </div>
-
+                )}
                 {matched && (
                     <div className="swipe__match animate-fade-up">
                         <div>
                             <div className="swipe__match-emoji">🎉</div>
                             <p className="swipe__match-label">It's a match!</p>
                             <h4 className="swipe__match-title">{matched.title}</h4>
-                            <p className="swipe__match-text">You both liked this one. Time to press play.</p>
-                            <Button variant="hero" onClick={reset}>Keep swiping</Button>
+                            <Button variant="hero" onClick={reset}>
+                                Keep swiping
+                            </Button>
                         </div>
                     </div>
                 )}
             </div>
-
             <div className="swipe__controls">
-                <button onClick={() => swipe("left")} className="swipe__fab swipe__fab--skip" aria-label="Skip"><X /></button>
-                <button onClick={() => swipe("right")} className="swipe__fab swipe__fab--like animate-pulse-glow" aria-label="Like"><Heart /></button>
+                <button
+                    onClick={() => swipe("left")}
+                    className="swipe__fab swipe__fab--skip"
+                >
+                    <X />
+                </button>
+                <button
+                    onClick={() => swipe("right")}
+                    className="swipe__fab swipe__fab--like">
+                    <Heart />
+                </button>
             </div>
         </section>
     );
 };
+
 export default SwipeDemo;

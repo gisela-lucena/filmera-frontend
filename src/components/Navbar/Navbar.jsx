@@ -1,5 +1,6 @@
 import logo from "../../images/filmera-logo.png";
 import { Button } from "../ui/Button";
+import { Link } from "react-router-dom";
 
 const Navbar = () => (
     <header className="navbar">
@@ -13,7 +14,7 @@ const Navbar = () => (
                 <a href="#features">Features</a>
                 <a href="#demo">Try demo</a>
             </div>
-            <Button variant="hero" size="sm">Get started</Button>
+            <Link to="/room"><Button variant="hero" size="sm">Get started</Button></Link>
         </nav>
     </header>
 );

@@ -2,6 +2,7 @@ import { Play, Sparkles } from "lucide-react";
 import couple from "../../images/hero-couple.jpg";
 import logo from "../../images/filmera-logo.png";
 import { Button } from "../ui/Button";
+import { Link } from "react-router-dom";
 
 const Hero = () => (
     <section className="hero">
@@ -16,8 +17,8 @@ const Hero = () => (
                     FILMERA ends the "what should we watch?" debate. Create a room, swipe through movies together, and get an instant match — like Tinder, for movie night.
                 </p>
                 <div className="hero__actions">
-                    <Button variant="hero" size="xl"><Play /> Start a room</Button>
-                    <Button variant="glass" size="xl">Join with code</Button>
+                    <Link to="/room"><Button variant="hero" size="xl"><Play /> Start a room</Button></Link>
+                    <Link to="/room"><Button variant="glass" size="xl">Join with code</Button></Link>
                 </div>
                 <div className="hero__stats">
                     <div><span className="hero__stat-num">2+</span> players</div>

@@ -3,9 +3,8 @@ import { useNavigate, useParams } from "react-router-dom";
 import { Heart, X, Star, Copy, ArrowLeft, Users, Play } from "lucide-react";
 import { Button } from "../../components/ui/Button";
 import "./room.css";
+import api from "../../utils/Api.js";
 
-const TMDB_KEY = import.meta.env.VITE_TMDB_API_KEY;
-const TMDB_BASE = "https://api.themoviedb.org/3";
 const IMG = "https://image.tmdb.org/t/p/w500";
 
 const GENRES = [
@@ -173,20 +172,14 @@ export default function Room() {
     const fetchMovies = async () => {
         setLoading(true);
         setError("");
+
         try {
-            if (!TMDB_KEY) throw new Error("Missing VITE_TMDB_API_KEY. Add it to use TMDB.");
-            const params = new URLSearchParams({
-                api_key: TMDB_KEY,
-                sort_by: sort,
-                include_adult: "false",
-                "vote_count.gte": "100",
-                page: "1",
+            const data = await api.getDiscoverMovies({
+                genres: selectedGenres,
+                year,
+                sort,
             });
-            if (selectedGenres.length) params.set("with_genres", selectedGenres.join(","));
-            if (year !== "any") params.set("primary_release_year", year);
-            const res = await fetch(`${TMDB_BASE}/discover/movie?${params}`);
-            if (!res.ok) throw new Error(`TMDB error ${res.status}`);
-            const data = await res.json();
+
             const list = (data.results || []).slice(0, 20).map((m) => ({
                 id: m.id,
                 title: m.title,
@@ -195,7 +188,11 @@ export default function Room() {
                 overview: m.overview,
                 poster: m.poster_path ? `${IMG}${m.poster_path}` : null,
             }));
-            if (!list.length) throw new Error("No movies found for those filters.");
+
+            if (!list.length) {
+                throw new Error("No movies found for those filters.");
+            }
+
             return list;
         } catch (e) {
             setError(e.message);

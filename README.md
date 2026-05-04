@@ -1,16 +1,131 @@
-# React + Vite
+🎬 FILMERA — Decide What to Watch, Together
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+📋 About the Project
 
-Currently, two official plugins are available:
+FILMERA is a React-based web application that helps users decide what movie to watch together in a fun and interactive way.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+Instead of endlessly scrolling through streaming platforms, users can:
 
-## React Compiler
+- Create or join a shared room
+- Select preferences (genre, year, popularity)
+- Swipe through movie suggestions
+- Get a match when everyone likes the same movie
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+Think of it as Tinder for movie night 🍿
 
-## Expanding the ESLint configuration
+⸻
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+🚀 Features
+
+🎮 Real-Time Room Experience
+
+- Create a private room with a unique code
+- Join a room via URL or code
+- Multi-user interaction using BroadcastChannel
+
+🎯 Smart Movie Selection
+
+- Filter movies by:
+  - Genre
+  - Year
+  - Popularity / Rating / Release date
+- Fetch data dynamically from TMDB API
+
+👉 Swipe Interaction
+
+- Swipe right (Like) or left (Skip)
+- Animated swipe cards
+- Real-time match detection
+
+🎉 Match System
+
+- When all participants like the same movie:
+  - Match screen is triggered
+  - Movie details displayed (poster, title, overview)
+
+📱 Responsive UI
+
+- Fully responsive layout
+- Mobile-friendly swipe experience
+
+⸻
+
+🛠️ Technologies Used
+
+Frontend
+
+- React 18
+- React Router v6
+- Vite
+
+State & Logic
+
+- React Hooks (useState, useEffect, useMemo, useRef)
+- BroadcastChannel API (for real-time communication)
+
+API Integration
+
+- TMDB (The Movie Database) API
+- Bearer Token Authentication
+
+Styling
+
+- CSS (BEM methodology)
+- Custom design system (tokens, gradients, animations)
+
+UI & Icons
+
+- Lucide React (icons)
+
+⸻
+
+🔌 API
+
+This project uses the TMDB API:
+
+- Popular movies
+- Discover movies (with filters)
+- Genres
+- Movie details
+
+🧠 How It Works
+
+1. User creates or joins a room
+2. Host selects filters (genre, year, sort)
+3. App fetches movies from TMDB API
+4. Movies are displayed as swipe cards
+5. Each user votes (like/dislike)
+6. When all users like the same movie → 🎉 MATCH
+
+⸻
+
+🎯 Project Purpose
+
+This project was built to:
+
+- Practice full-stack architecture concepts (API-driven UI)
+- Implement real-time multi-user interaction
+- Work with external APIs (TMDB)
+- Build a modern, responsive React application
+- Simulate a real-world product experience
+
+⸻
+
+🔮 Future Improvements
+
+- Real backend (instead of BroadcastChannel)
+- User authentication
+- Persistent rooms across devices
+- Watchlist / favorites
+- Streaming platform links
+- AI-based recommendations
+
+⸻
+
+👩‍💻 Author
+
+Gisela Elia
+Software Engineering Student | Full-Stack Developer
+
+- GitHub: https://github.com/gisela-lucena
+- LinkedIn: https://www.linkedin.com/in/giselaelia/

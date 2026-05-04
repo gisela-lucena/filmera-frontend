@@ -6,7 +6,7 @@ class Api {
 
   _handleServerResponse(res) {
     if (res.ok) {
-      return res.json();
+      return res.json()
     }
 
     return Promise.reject(new Error(`Error: ${res.status}`));
@@ -49,6 +49,20 @@ class Api {
 
   getMovieDetails(movieId) {
     return this._request(`/movie/${movieId}?language=en-US`);
+  }
+
+  getDiscoverMovies({ genres, year, sort }) {
+    const params = new URLSearchParams({
+      sort_by: sort,
+      include_adult: "false",
+      "vote_count.gte": "100",
+      page: "1",
+    });
+
+    if (genres?.length) params.set("with_genres", genres.join(","));
+    if (year && year !== "any") params.set("primary_release_year", year);
+
+    return this._request(`/discover/movie?${params}`);
   }
 }
 

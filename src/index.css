@@ -1,0 +1,16 @@
+@import "./styles/tokens.css";
+@import "../src/components/App/App.css";
+@import "./styles/utilities.css";
+@import "./styles/animations.css";
+
+@import "./components/ui/button.css";
+@import "./components/App/section.css";
+@import "./components/Problem/card.css";
+@import "./components/Navbar/navbar.css";
+@import "./components/Hero/hero.css";
+@import "./components/Features/features.css";
+@import "./components/HowItWorks/how.css";
+@import "./components/CTA/cta.css";
+@import "./components/Footer/footer.css";
+@import "./components/SwipeDemo/swipe.css";
+@import "./pages/NotFound/notfound.css";

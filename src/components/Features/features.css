@@ -1,0 +1,23 @@
+.features__row {
+  display: flex;
+  gap: 1.25rem;
+}
+.features__icon {
+  flex-shrink: 0;
+  width: 3.5rem;
+  height: 3.5rem;
+  border-radius: 1rem;
+  background: var(--gradient-primary);
+  display: grid;
+  place-items: center;
+  box-shadow: var(--shadow-glow);
+  transition: var(--transition-smooth);
+}
+.features__row:hover .features__icon {
+  transform: scale(1.1);
+}
+.features__icon svg {
+  width: 1.75rem;
+  height: 1.75rem;
+  color: hsl(var(--primary-foreground));
+}

@@ -1,0 +1,58 @@
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-12px);
+  }
+}
+@keyframes pulse-glow {
+  0%,
+  100% {
+    box-shadow: 0 0 30px hsl(var(--accent) / 0.4);
+  }
+  50% {
+    box-shadow: 0 0 60px hsl(var(--accent) / 0.7);
+  }
+}
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes swipe-left {
+  to {
+    transform: translateX(-150%) rotate(-20deg);
+    opacity: 0;
+  }
+}
+@keyframes swipe-right {
+  to {
+    transform: translateX(150%) rotate(20deg);
+    opacity: 0;
+  }
+}
+.animate-float {
+  animation: float 4s ease-in-out infinite;
+}
+.animate-pulse-glow {
+  animation: pulse-glow 2.5s ease-in-out infinite;
+}
+.animate-fade-up {
+  animation: fade-up 0.8s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.animate-fade-up--delay-1 {
+  animation-delay: 0.15s;
+}
+.animate-swipe-left {
+  animation: swipe-left 0.4s forwards;
+}
+.animate-swipe-right {
+  animation: swipe-right 0.4s forwards;
+}

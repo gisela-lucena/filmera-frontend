@@ -1,0 +1,25 @@
+.section {
+  padding: 3rem 0;
+}
+.section__eyebrow {
+  color: hsl(var(--accent));
+  font-weight: 600;
+  margin-bottom: 2rem;
+}
+.section__title {
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 700;
+}
+.section__head--left {
+  max-width: 36rem;
+  margin-bottom: 3.5rem;
+}
+.section__head--center {
+  max-width: 36rem;
+  margin: 0 auto 3.5rem;
+  text-align: center;
+}
+.section__lead {
+  color: hsl(var(--muted-foreground));
+  margin-top: 1rem;
+}

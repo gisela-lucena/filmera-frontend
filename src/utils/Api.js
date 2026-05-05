@@ -1,3 +1,6 @@
+const DEFAULT_LANGUAGE = "en-US";
+const DEFAULT_PAGE = 1;
+
 class Api {
   constructor({ baseUrl, token }) {
     this._baseUrl = baseUrl;
@@ -6,7 +9,10 @@ class Api {
 
   _handleServerResponse(res) {
     if (res.ok) {
-      return res.json()
+      return res.json();
+    }
+    if (res.status === 401) {
+      console.error("Unauthorized access - invalid or expired token.");
     }
 
     return Promise.reject(new Error(`Error: ${res.status}`));
@@ -24,31 +30,35 @@ class Api {
   }
 
   getPopularMovies() {
-    return this._request("/movie/popular?language=en-US&page=1");
+    return this._request(
+      `/movie/popular?language=${DEFAULT_LANGUAGE}&page=${DEFAULT_PAGE}`,
+    );
   }
 
   getTopRatedMovies() {
-    return this._request("/movie/top_rated?language=en-US&page=1");
+    return this._request(
+      `/movie/top_rated?language=${DEFAULT_LANGUAGE}&page=${DEFAULT_PAGE}`,
+    );
   }
 
   getGenres() {
-    return this._request("/genre/movie/list?language=en-US");
+    return this._request(`/genre/movie/list?language=${DEFAULT_LANGUAGE}`);
   }
 
   getMoviesByGenre(genreId) {
     return this._request(
-      `/discover/movie?with_genres=${genreId}&language=en-US&page=1`,
+      `/discover/movie?with_genres=${genreId}&language=${DEFAULT_LANGUAGE}&page=${DEFAULT_PAGE}`,
     );
   }
 
   getMoviesByGenreAndYear(genreId, year, page = 1) {
     return this._request(
-      `/discover/movie?language=en-US&page=${page}&with_genres=${genreId}&primary_release_year=${year}`,
+      `/discover/movie?language=${DEFAULT_LANGUAGE}&page=${page}&with_genres=${genreId}&primary_release_year=${year}`,
     );
   }
 
   getMovieDetails(movieId) {
-    return this._request(`/movie/${movieId}?language=en-US`);
+    return this._request(`/movie/${movieId}?language=${DEFAULT_LANGUAGE}`);
   }
 
   getDiscoverMovies({ genres, year, sort }) {

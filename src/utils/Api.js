@@ -31,11 +31,11 @@ class Api {
   //login
   //register
   //rota banco de dados para pegar sala, movies, etc para o backend ver que solicitao foi feita no frontend.
-  
+
 }
 
 const api = new Api({
-  baseUrl: import.meta.env.VITE_API_BASE_URL,
+  baseUrl: import.meta.env.API_BASE_URL,
 });
 
 export default api;

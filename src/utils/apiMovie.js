@@ -78,7 +78,7 @@ class ApiMovie {
 
 const apiMovie = new ApiMovie({
   baseUrl: import.meta.env.VITE_TMDB_API_BASE_URL,
-  token: import.meta.env.VITE_TMDB_TOKEN,
+  token: import.meta.env.TMDB_TOKEN,
 });
 
 export default apiMovie;

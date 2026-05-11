@@ -1,9 +1,10 @@
 const DEFAULT_LANGUAGE = "en-US";
 const DEFAULT_PAGE = 1;
 
-class Api {
-  constructor({ baseUrl }) {
+class ApiMovie {
+  constructor({ baseUrl, token }) {
     this._baseUrl = baseUrl;
+    this._token = token;
   }
 
   _handleServerResponse(res) {
@@ -75,8 +76,9 @@ class Api {
   }
 }
 
-const api = new Api({
-  baseUrl: import.meta.env.VITE_API_BASE_URL,
+const apiMovie = new ApiMovie({
+  baseUrl: import.meta.env.VITE_TMDB_API_BASE_URL,
+  token: import.meta.env.VITE_TMDB_TOKEN,
 });
 
-export default api;
+export default apiMovie;

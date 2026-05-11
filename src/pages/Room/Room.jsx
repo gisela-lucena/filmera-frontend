@@ -3,7 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { Heart, X, Star, Copy, ArrowLeft, Users, Play } from "lucide-react";
 import { Button } from "../../components/ui/Button";
 import "./room.css";
-import api from "../../utils/Api.js";
+import apiMovie from "../../utils/apiMovie.js";
 
 
 const IMG = "https://image.tmdb.org/t/p/w500";
@@ -52,7 +52,7 @@ export default function Room() {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
 
-       const [selectedGenres, setSelectedGenres] = useState([]);
+    const [selectedGenres, setSelectedGenres] = useState([]);
     const [year, setYear] = useState("any");
     const [sort, setSort] = useState("popularity.desc");
 
@@ -96,13 +96,13 @@ export default function Room() {
                 setMatched(null);
                 setStage("swiping");
             } else if (type === "swipe") {
-                
+
                 if (room.host === me) {
                     room.swipes = room.swipes || {};
                     room.swipes[payload.movieId] = room.swipes[payload.movieId] || {};
                     room.swipes[payload.movieId][payload.userId] = payload.liked;
                     saveRoom(code, room);
-                 
+
                     const likes = room.swipes[payload.movieId];
                     if (room.participants.every((p) => likes[p] === true)) {
                         const movie = (room.movies || []).find((m) => m.id === payload.movieId);
@@ -169,7 +169,7 @@ export default function Room() {
         setError("");
 
         try {
-            const data = await api.getDiscoverMovies({
+            const data = await apiMovie.getDiscoverMovies({
                 genres: selectedGenres,
                 year,
                 sort,

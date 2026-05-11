@@ -77,8 +77,7 @@ class Api {
 }
 
 const api = new Api({
-  baseUrl:
-    import.meta.env.VITE_TMDB_API_BASE_URL || "https://api.themoviedb.org/3",
+  baseUrl: import.meta.env.VITE_TMDB_API_BASE_URL,
   token: import.meta.env.VITE_TMDB_TOKEN,
 });
 

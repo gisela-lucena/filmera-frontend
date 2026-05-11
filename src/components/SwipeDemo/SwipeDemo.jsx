@@ -14,7 +14,7 @@ const SwipeDemo = () => {
     useEffect(() => {
         async function fetchMovies() {
             try {
-                const data = await A.getPopularMovies();
+                const data = await apiMovie.getPopularMovies();
                 const list = (data.results || []).slice(0, 10).map((m) => ({
                     id: m.id,
                     title: m.title,

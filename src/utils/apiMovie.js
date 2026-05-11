@@ -75,6 +75,8 @@ class ApiMovie {
     return this._request(`/discover/movie?${params}`);
   }
 }
+console.log("token:", import.meta.env.VITE_TMDB_TOKEN);
+console.log("baseUrl:", import.meta.env.VITE_TMDB_API_BASE_URL);
 
 const apiMovie = new ApiMovie({
   baseUrl: import.meta.env.VITE_TMDB_API_BASE_URL,

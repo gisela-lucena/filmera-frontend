@@ -175,13 +175,13 @@ export default function Room() {
                 sort,
             });
 
-            const list = (data.results || []).slice(0, 20).map((m) => ({
-                id: m.id,
+            const list = (data.movies || []).slice(0, 20).map((m) => ({
+                id: m.tmdbId,
                 title: m.title,
-                year: (m.release_date || "").slice(0, 4),
-                rating: m.vote_average?.toFixed(1),
+                year: m.year,
+                rating: Number(m.rating).toFixed(1),
                 overview: m.overview,
-                poster: m.poster_path ? `${IMG}${m.poster_path}` : null,
+                poster: m.poster || null,
             }));
 
             if (!list.length) {

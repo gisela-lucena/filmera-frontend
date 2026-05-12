@@ -131,6 +131,20 @@ class Api {
   getMovieDetails(movieId) {
     return this._request(`/movies/${movieId}`);
   }
+
+  getDiscoverMovies({ genres, year, sort } = {}) {
+    const params = new URLSearchParams();
+    if (genres?.length) {
+      params.append("genres", genres.join(","));
+    }
+    if (year && year !== "any") {
+      params.append("year", year);
+    }
+    if (sort) {
+      params.append("sort", sort);
+    }
+    return this._request(`/movies?${params.toString()}`);
+  }
 }
 
 const api = new Api({

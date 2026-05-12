@@ -1,9 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { Heart, Star, X } from "lucide-react";
 import { Button } from "../ui/Button";
-import apiMovie from "../../utils/apiMovie.js";
-
-const IMG = "https://image.tmdb.org/t/p/w500";
+import api from "../../utils/Api.js";
 
 const SwipeDemo = () => {
     const [movies, setMovies] = useState([]);
@@ -14,14 +12,14 @@ const SwipeDemo = () => {
     useEffect(() => {
         async function fetchMovies() {
             try {
-                const data = await apiMovie.getPopularMovies();
-                const list = (data.results || []).slice(0, 10).map((m) => ({
-                    id: m.id,
+                const data = await api.getPopularMovies();
+                const list = (data.movies || []).slice(0, 10).map((m) => ({
+                    id: m.tmdbId,
                     title: m.title,
-                    year: (m.release_date || "").slice(0, 4),
-                    rating: m.vote_average?.toFixed(1),
+                    year: m.year,
+                    rating: Number(m.rating).toFixed(1),
                     overview: m.overview,
-                    poster: m.poster_path ? `${IMG}${m.poster_path}` : null,
+                    poster: m.poster || null,
                 }));
                 setMovies(list);
             } catch (error) {
@@ -80,8 +78,10 @@ const SwipeDemo = () => {
                                 <Star /> {movie.rating} • {movie.year}
                             </div>
                             <h3 className="swipe__title">{movie.title}</h3>
-                            <p className="swipe__genre">{movie.genre}</p>
-                        </div>
+                            <p className="swipe__genre">
+                                {movie.overview?.slice(0, 90)}
+                                {movie.overview?.length > 90 ? "…" : ""}
+                            </p>                        </div>
                     </div>
                 )}
                 {matched && (

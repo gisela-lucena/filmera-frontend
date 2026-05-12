@@ -38,6 +38,7 @@
   font-size: 0.875rem;
   font-weight: 800;
   color: hsl(var(--muted-foreground));
+  scroll-behavior: smooth;
 }
 .navbar__links a {
   transition: var(--transition-smooth);

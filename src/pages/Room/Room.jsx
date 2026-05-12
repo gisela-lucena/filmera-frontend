@@ -3,7 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { Heart, X, Star, Copy, ArrowLeft, Users, Play } from "lucide-react";
 import { Button } from "../../components/ui/Button";
 import "./room.css";
-import apiMovie from "../../utils/apiMovie.js";
+import api from "../../utils/Api.js";
 
 
 const IMG = "https://image.tmdb.org/t/p/w500";
@@ -169,7 +169,7 @@ export default function Room() {
         setError("");
 
         try {
-            const data = await apiMovie.getDiscoverMovies({
+            const data = await api.getDiscoverMovies({
                 genres: selectedGenres,
                 year,
                 sort,

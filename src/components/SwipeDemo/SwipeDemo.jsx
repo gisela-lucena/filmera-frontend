@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { Heart, Star, X } from "lucide-react";
 import { Button } from "../ui/Button";
-import apiMovie from "../../utils/apiMovie.js";
+import api from "../../utils/Api.js";
 
 const IMG = "https://image.tmdb.org/t/p/w500";
 
@@ -14,7 +14,7 @@ const SwipeDemo = () => {
     useEffect(() => {
         async function fetchMovies() {
             try {
-                const data = await apiMovie.getPopularMovies();
+                const data = await api.getPopularMovies();
                 const list = (data.results || []).slice(0, 10).map((m) => ({
                     id: m.id,
                     title: m.title,

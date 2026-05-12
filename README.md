@@ -1,8 +1,10 @@
 🎬 FILMERA — Decide What to Watch, Together
 
-📋 About the Project
-
 FILMERA is a React-based web application that helps users decide what movie to watch together in a fun and interactive way.
+
+## Live Demo
+
+🔗 https://filmera.us/
 
 Instead of endlessly scrolling through streaming platforms, users can:
 
@@ -51,12 +53,13 @@ Think of it as Tinder for movie night 🍿
 ⸻
 
 🛠️ Technologies Used
+Frontend:
 
-Frontend
-
-- React 18
-- React Router v6
+- React
 - Vite
+- React Router
+- Context API
+- CSS Modules / BEM
 
 State & Logic
 
@@ -76,6 +79,12 @@ Styling
 UI & Icons
 
 - Lucide React (icons)
+
+Deployment
+
+- Vercel (Frontend)
+- Render (Backend)
+- MongoDB Atlas
 
 ⸻
 
@@ -113,7 +122,6 @@ This project was built to:
 
 🔮 Future Improvements
 
-- Real backend (instead of BroadcastChannel)
 - User authentication
 - Persistent rooms across devices
 - Watchlist / favorites

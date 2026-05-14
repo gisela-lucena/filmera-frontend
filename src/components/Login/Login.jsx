@@ -2,6 +2,7 @@ import { useState } from "react";
 import Modal from "../Modal/Modal";
 import { Button } from "../ui/Button";
 import api from "../../utils/Api";
+import { useNavigate } from "react-router-dom";
 
 const Login = ({ open, onClose, onSwitchToRegister, onLogin }) => {
     const [email, setEmail] = useState("");
@@ -12,10 +13,10 @@ const Login = ({ open, onClose, onSwitchToRegister, onLogin }) => {
         try {
             const data = await api.signin({ email, password });
             localStorage.setItem("jwt", data.token);
-            console.log("Login successful:", data);
             setEmail("");
             setPassword("");
             onClose();
+            navigate("/room");
         } catch (err) {
             console.error("Login failed:", err);
         }

@@ -63,7 +63,6 @@ const Hero = () => {
                     setIsRegisterOpen(true);
                 }}
             />
-
             <Register
                 open={isRegisterOpen}
                 onClose={() => setIsRegisterOpen(false)}

@@ -14,9 +14,11 @@ const Index = () => (
         <Problem />
         <HowItWorks />
         <Features />
-        <SwipeDemo />        <CTA />
+        <SwipeDemo />
+        <CTA />
         <Footer />
     </main>
+    
 );
 
 export default Index;

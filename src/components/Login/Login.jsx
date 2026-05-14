@@ -1,14 +1,24 @@
 import { useState } from "react";
 import Modal from "../Modal/Modal";
 import { Button } from "../ui/Button";
+import api from "../../utils/Api";
 
-const Login = ({ open, onClose, onSwitchToRegister }) => {
+const Login = ({ open, onClose, onSwitchToRegister, onLogin }) => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log("Login attempt:", { email });
+        try {
+            const data = await api.signin({ email, password });
+            localStorage.setItem("jwt", data.token);
+            console.log("Login successful:", data);
+            setEmail("");
+            setPassword("");
+            onClose();
+        } catch (err) {
+            console.error("Login failed:", err);
+        }
     };
 
     return (

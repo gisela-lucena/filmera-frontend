@@ -1,15 +1,24 @@
 import { useState } from "react";
 import Modal from "../Modal/Modal";
 import { Button } from "../ui/Button";
+import api from "../../utils/Api";
 
 const Register = ({ open, onClose, onSwitchToLogin }) => {
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log("Register attempt:", { name, email });
+        try {
+            await api.signup({ name, email, password });
+            setName("");
+            setEmail("");
+            setPassword("");
+            onSwitchToLogin();
+        } catch (err) {
+            console.error("Register failed:", err);
+        }
     };
 
     return (

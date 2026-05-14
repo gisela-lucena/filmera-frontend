@@ -16,7 +16,10 @@ const Login = ({ open, onClose, onSwitchToRegister, onLogin }) => {
             setEmail("");
             setPassword("");
             onClose();
-            navigate("/rooms");
+            console.log("before navigate");
+            navigate("/room");
+
+            console.log("after navigate");
         } catch (err) {
             console.error("Login failed:", err);
         }

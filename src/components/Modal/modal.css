@@ -1,0 +1,125 @@
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background: hsl(var(--background) / 0.7);
+  display: grid;
+  place-items: center;
+  padding: 1rem;
+  animation: modal-fade 0.2s ease-out;
+}
+.modal {
+  position: relative;
+  width: 100%;
+  max-width: 26rem;
+  background: linear-gradient(180deg, hsl(265 65% 10%), hsl(265 70% 6%));
+  border: 1px solid rgb(255 255 255 / 0.08);
+  border-radius: 1rem;
+  padding: 2rem;
+  box-shadow: var(--shadow-elegant);
+  animation: modal-pop 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.modal__close {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 0.5rem;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: hsl(var(--muted-foreground));
+  display: grid;
+  place-items: center;
+  transition: var(--transition-smooth);
+}
+.modal__close:hover {
+  background: rgb(255 255 255 / 0.06);
+  color: hsl(var(--foreground));
+}
+.modal__title {
+  font-size: 1.5rem;
+  font-weight: 800;
+  margin-bottom: 0.25rem;
+  letter-spacing: -0.02em;
+}
+.modal__subtitle {
+  color: hsl(var(--muted-foreground));
+  font-size: 0.9rem;
+  margin-bottom: 1.5rem;
+}
+.modal__form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.modal__field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+}
+.modal__label {
+  font-size: 0.8rem;
+  font-weight: 800;
+  color: hsl(var(--muted-foreground));
+}
+.modal__input {
+  height: 2.75rem;
+  padding: 0 0.875rem;
+  border-radius: 0.6rem;
+  background: hsl(var(--background) / 0.6);
+  border: 1px solid hsl(var(--border));
+  color: hsl(var(--foreground));
+  font-family: inherit;
+  font-size: 0.95rem;
+  transition: var(--transition-smooth);
+}
+.modal__input:focus {
+  outline: none;
+  border-color: hsl(var(--primary-glow));
+  box-shadow: 0 0 0 3px hsl(var(--primary) / 0.25);
+}
+.modal__submit {
+  margin-top: 0.5rem;
+  width: 100%;
+}
+.modal__footer {
+  margin-top: 1.25rem;
+  text-align: center;
+  font-size: 0.875rem;
+  color: hsl(var(--muted-foreground));
+}
+.modal__link {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: hsl(var(--accent));
+  font-weight: 600;
+  font-family: inherit;
+  font-size: inherit;
+  padding: 0;
+  margin-left: 0.25rem;
+}
+.modal__link:hover {
+  text-decoration: underline;
+}
+
+@keyframes modal-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes modal-pop {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}

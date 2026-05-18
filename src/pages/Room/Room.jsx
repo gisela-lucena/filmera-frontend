@@ -5,8 +5,6 @@ import { Button } from "../../components/ui/Button";
 import "./room.css";
 import api from "../../utils/Api.js";
 
-const createdRoomRef = useRef(false);
-
 const GENRES = [
     { id: 28, name: "Action" }, { id: 12, name: "Adventure" }, { id: 16, name: "Animation" },
     { id: 35, name: "Comedy" }, { id: 80, name: "Crime" }, { id: 99, name: "Documentary" },
@@ -28,6 +26,8 @@ const YEARS = ["any", ...Array.from({ length: 30 }, (_, i) =>
 export default function Room() {
     const { code: urlCode } = useParams();
     const navigate = useNavigate();
+
+    const createdRoomRef = useRef(false);
 
     const [stage, setStage] = useState(urlCode ? "waiting" : "lobby");
     const [code, setCode] = useState(urlCode || "");
@@ -76,9 +76,9 @@ export default function Room() {
         if (!urlCode) return;
 
         if (createdRoomRef.current) {
-        createdRoomRef.current = false;
-        return;
-    }
+            createdRoomRef.current = false;
+            return;
+        }
 
         const autoJoinRoom = async () => {
             try {

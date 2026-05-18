@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Heart, X, Star, Copy, ArrowLeft, Users, Play } from "lucide-react";
 import { Button } from "../../components/ui/Button";
@@ -27,7 +27,7 @@ export default function Room() {
     const { code: urlCode } = useParams();
     const navigate = useNavigate();
 
-    const [stage, setStage] = useState(urlCode ? "joining" : "lobby");
+    const [stage, setStage] = useState(urlCode ? "waiting" : "lobby");
     const [code, setCode] = useState(urlCode || "");
     const [joinInput, setJoinInput] = useState("");
     const [participants, setParticipants] = useState([]);
@@ -68,6 +68,34 @@ export default function Room() {
             setLoading(false);
         }
     };
+
+    useEffect(() => {
+        if (!urlCode) return;
+
+        const autoJoinRoom = async () => {
+            try {
+                setLoading(true);
+                setError("");
+
+                const room = await api.joinRoom(urlCode);
+                const roomData = room.room || room;
+
+                setCode(roomData.code);
+                setParticipants(roomData.participants || []);
+                setMovies(roomData.movies || []);
+                setIsHost(false);
+                setStage(roomData.movies?.length ? "swiping" : "waiting");
+            } catch (err) {
+                setError(err.message);
+                setStage("lobby");
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        autoJoinRoom();
+    }, [urlCode]);
+
     const joinRoom = async () => {
         const roomCode = joinInput.trim().toUpperCase();
         if (!roomCode) return;
@@ -79,7 +107,7 @@ export default function Room() {
             const roomData = room.room || room;
 
             setCode(roomData.code);
-            setParticipants(room.participants || []);
+            setParticipants(roomData.participants || []);
             setMovies(roomData.movies || []);
             setIsHost(false);
             setStage(roomData.movies?.length ? "swiping" : "waiting");
@@ -292,10 +320,30 @@ export default function Room() {
 
                 {stage === "waiting" && (
                     <div className="room__panel room__panel--center">
-                        <h2 className="room__title">You're in room <span className="text-gradient-accent">{code}</span></h2>
-                        <p className="room__lead">Waiting for the host to start swiping…</p>
-                        <div className="room__participants"><Users /> {participants.length} in room</div>
-                        <button className="room__copy" onClick={copyShare}><Copy /> Share link</button>
+                        {loading ? (
+                            <p className="room__lead">Joining room...</p>
+                        ) : error ? (
+                            <>
+                                <h2 className="room__title">Room not found</h2>
+                                <p className="room__error">{error}</p>
+                                <Button variant="hero" onClick={() => navigate("/room")}>
+                                    Back to rooms
+                                </Button>
+                            </>
+                        ) : (
+                            <>
+                                <h2 className="room__title">
+                                    You're in room <span className="text-gradient-accent">{code}</span>
+                                </h2>
+                                <p className="room__lead">Waiting for the host to start swiping…</p>
+                                <div className="room__participants">
+                                    <Users /> {participants.length} in room
+                                </div>
+                                <button className="room__copy" onClick={copyShare}>
+                                    <Copy /> Share link
+                                </button>
+                            </>
+                        )}
                     </div>
                 )}
 

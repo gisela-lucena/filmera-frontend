@@ -1,9 +1,11 @@
-import { useMemo, useState, useEffect } from "react";
+import { useMemo, useState, useEffect, useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Heart, X, Star, Copy, ArrowLeft, Users, Play } from "lucide-react";
 import { Button } from "../../components/ui/Button";
 import "./room.css";
 import api from "../../utils/Api.js";
+
+const createdRoomRef = useRef(false);
 
 const GENRES = [
     { id: 28, name: "Action" }, { id: 12, name: "Adventure" }, { id: 16, name: "Animation" },
@@ -61,6 +63,7 @@ export default function Room() {
             setParticipants(roomData.participants || []);
             setIsHost(true);
             setStage("config");
+            createdRoomRef.current = true;
             navigate(`/room/${roomCode}`, { replace: true });
         } catch (err) {
             setError(err.message);
@@ -71,6 +74,11 @@ export default function Room() {
 
     useEffect(() => {
         if (!urlCode) return;
+
+        if (createdRoomRef.current) {
+        createdRoomRef.current = false;
+        return;
+    }
 
         const autoJoinRoom = async () => {
             try {

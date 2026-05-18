@@ -58,7 +58,7 @@ export default function Room() {
             const roomCode = roomData.code;
 
             setCode(roomCode);
-            setParticipants(room.participants || []);
+            setParticipants(roomData.participants || []);
             setIsHost(true);
             setStage("config");
             navigate(`/room/${roomCode}`, { replace: true });
@@ -78,7 +78,7 @@ export default function Room() {
             const room = await api.joinRoom(roomCode);
             const roomData = room.room || room;
 
-            setCode(roomCode);
+            setCode(roomData.code);
             setParticipants(room.participants || []);
             setMovies(roomData.movies || []);
             setIsHost(false);
@@ -159,7 +159,7 @@ export default function Room() {
         setTimeout(async () => {
             try {
                 const result = await api.createSwipe({
-                    roomId: code,
+                    roomCode: code,
                     movie,
                     liked,
                 });
@@ -311,8 +311,8 @@ export default function Room() {
 
                         {!movie ? (
                             <div className="room__empty">
-                                <p>Out of movies! {isHost() && "Reload filters to fetch more."}</p>
-                                {isHost() && <Button variant="hero" onClick={() => setStage("config")}>Back to filters</Button>}
+                                <p>Out of movies! {isHost && "Reload filters to fetch more."}</p>
+                                {isHost && (<Button variant="hero" onClick={() => setStage("config")}>Back to filters</Button>)}
                             </div>
                         ) : (
                             <>

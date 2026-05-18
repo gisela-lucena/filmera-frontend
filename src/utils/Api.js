@@ -58,52 +58,56 @@ class Api {
     });
   }
 
-  getRoom(roomId) {
-    return this._request(`/rooms/${roomId}`);
+  getRoom(roomCode) {
+    return this._request(`/rooms/${roomCode}`);
   }
 
-  joinRoom(roomId) {
-    return this._request(`/rooms/${roomId}/join`, {
+  joinRoom(roomCode) {
+    return this._request(`/rooms/${roomCode}/join`, {
       method: "POST",
     });
   }
 
-  leaveRoom(roomId) {
-    return this._request(`/rooms/${roomId}/leave`, {
+  leaveRoom(roomCode) {
+    return this._request(`/rooms/${roomCode}/leave`, {
       method: "POST",
     });
   }
 
-  getMoviesInRoom(roomId) {
-    return this._request(`/rooms/${roomId}/movies`);
+  getMoviesInRoom(roomCode) {
+    return this._request(`/rooms/${roomCode}/movies`);
   }
 
-  addMovieToRoom(roomId, movie) {
-    return this._request(`/rooms/${roomId}/movies`, {
+  addMovieToRoom(roomCode, movie) {
+    return this._request(`/rooms/${roomCode}/movies`, {
       method: "POST",
       body: JSON.stringify({ movie }),
     });
   }
 
-  removeMovieFromRoom(roomId, movieId) {
-    return this._request(`/rooms/${roomId}/movies/${movieId}`, {
+  removeMovieFromRoom(roomCode, movieId) {
+    return this._request(`/rooms/${roomCode}/movies/${movieId}`, {
       method: "DELETE",
     });
   }
 
-  createSwipe({ roomId, movie, liked }) {
-    return this._request(`/rooms/${roomId}/swipes`, {
+  createSwipe({ roomCode, movie, liked }) {
+    return this._request("/swipes", {
       method: "POST",
-      body: JSON.stringify({ movie, liked }),
+      body: JSON.stringify({
+        roomCode,
+        movieId: movie.id,
+        liked,
+      }),
     });
   }
 
-  getNextMovies(roomId) {
-    return this._request(`/rooms/${roomId}/next-movies`);
+  getNextMovies(roomCode) {
+    return this._request(`/rooms/${roomCode}/next-movies`);
   }
 
-  getMatches(roomId) {
-    return this._request(`/rooms/${roomId}/matches`);
+  getMatches(roomCode) {
+    return this._request(`/rooms/${roomCode}/matches`);
   }
 
   getPopularMovies() {

@@ -7,21 +7,20 @@ import SwipeDemo from "../components/SwipeDemo/SwipeDemo";
 import CTA from "../components/CTA/CTA";
 import Footer from "../components/Footer/Footer";
 
-const Index = () => (
-    <main className="page">
-        <Navbar
-            currentUser={currentUser}
-            onLogin={onLogin}
-            onLogout={onLogout}
-        />
-        <Hero />
-        <Problem />
-        <HowItWorks />
-        <Features />
-        <SwipeDemo />
-        <CTA />
-        <Footer />
-    </main>
+const Index = ({ currentUser, onLogin, onLogout }) => (<main className="page">
+    <Navbar
+        currentUser={currentUser}
+        onLogin={onLogin}
+        onLogout={onLogout}
+    />
+    <Hero />
+    <Problem />
+    <HowItWorks />
+    <Features />
+    <SwipeDemo />
+    <CTA />
+    <Footer />
+</main>
 
 );
 

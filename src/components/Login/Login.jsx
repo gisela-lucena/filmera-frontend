@@ -13,8 +13,10 @@ const Login = ({ open, onClose, onSwitchToRegister, onLogin }) => {
         e.preventDefault();
         try {
             const data = await api.signin({ email, password });
-            await onLogin(data);
-
+            if (onLogin) {
+                await onLogin(data);
+            }
+            
             setEmail("");
             setPassword("");
             onClose();

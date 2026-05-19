@@ -43,6 +43,7 @@ const App = () => {
         };
         checkToken();
     }, []);
+    console.log(isAuthChecked);
     if (!isAuthChecked) {
         return null;
     }
@@ -57,6 +58,7 @@ const App = () => {
                                 currentUser={currentUser}
                                 onLogin={handleLogin}
                                 onLogout={handleLogout}
+                                isAuthChecked={isAuthChecked}
                             />
                         } />
                     <Route path="/room" element={<Room currentUser={currentUser} />} />

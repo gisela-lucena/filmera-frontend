@@ -5,10 +5,13 @@ import { Button } from "../ui/Button";
 import { useState } from "react";
 import Login from "../Login/Login"
 import Register from "../Register/Register";
+import { useNavigate } from "react-router-dom";
 
-const Hero = () => {
+const Hero = ({ isAuthChecked }) => {
     const [isLoginOpen, setIsLoginOpen] = useState(false);
     const [isRegisterOpen, setIsRegisterOpen] = useState(false);
+    const navigate = useNavigate();
+
     return (
         <section className="hero">
             <div className="hero__spotlight" />
@@ -23,8 +26,13 @@ const Hero = () => {
                     </p>
                     <div className="hero__actions">
                         <Button variant="hero" size="xl" onClick={() => {
-                            setIsLoginOpen(false);
-                            setIsRegisterOpen(true);
+                            if (isAuthChecked) {
+                                navigate("/room");
+                            }
+                            if (!isAuthChecked) {
+                                setIsRegisterOpen(false);
+                                setIsLoginOpen(true);
+                            }
                         }}> <Play /> Start a room</Button>
                         <Button variant="glass" size="xl" onClick={() => {
                             setIsRegisterOpen(false);

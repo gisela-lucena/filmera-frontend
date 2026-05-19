@@ -116,7 +116,7 @@ export default function Room() {
     }, [urlCode]);
 
     useEffect(() => {
-        if (!code || stage === "swiping" || stage === "matched") return;
+        if (!code || stage === "matched") return;
 
         const intervalId = setInterval(async () => {
             try {
@@ -126,9 +126,12 @@ export default function Room() {
 
                 setParticipants(roomData.participants || []);
 
-                if (normalizedMovies.length) {
+                if (normalizedMovies.length && movies.length === 0) {
                     setMovies(normalizedMovies);
-                    setStage("swiping");
+                }
+                if (roomData.matchedMovie) {
+                    setMatched(roomData.matchedMovie);
+                    setStage("matched");
                 }
             } catch (err) {
                 console.error("Failed to refresh room:", err);
@@ -136,7 +139,7 @@ export default function Room() {
         }, 3000);
 
         return () => clearInterval(intervalId);
-    }, [code, stage]);
+    }, [code, stage, movies.length]);
 
     const joinRoom = async () => {
         const roomCode = joinInput.trim().toUpperCase();

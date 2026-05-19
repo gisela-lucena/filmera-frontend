@@ -478,12 +478,16 @@ export default function Room({ currentUser, onLogin }) {
                         <p className="room__lead">{matched.overview}</p>
                         {matched.poster && <img className="room__match-poster" src={matched.poster} alt={matched.title} />}
                         <div className="room__actions-center">
-                            <Button variant="hero" size="xl" onClick={() => {
-                                setMatched(null);
-                                setStage("swiping");
-                                setIndex(i => i + 1);
-                            }}>
-                                Keep swiping
+                            <Button variant="hero" size="xl" onClick={async () => {
+                                try {
+                                    await api.clearMatch(code);
+                                    setMatched(null);
+                                    setStage("swiping");
+                                    setIndex((currentIndex) => currentIndex + 1);
+                                } catch (err) {
+                                    setError(err.message);
+                                }
+                            }}>Keep swiping
                             </Button>
                             <Button variant="glass" size="xl" onClick={leaveRoom}>Leave room</Button>
                         </div>

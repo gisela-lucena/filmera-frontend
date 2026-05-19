@@ -149,6 +149,12 @@ class Api {
     }
     return this._request(`/movies?${params.toString()}`);
   }
+
+  clearMatch(roomCode) {
+    return this._request(`/rooms/${roomCode}/match/clear`, {
+      method: "PATCH",
+    });
+  }
 }
 
 const api = new Api({

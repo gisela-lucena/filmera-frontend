@@ -34,8 +34,12 @@ const Hero = ({ currentUser, onLogin }) => {
                             }
                         }}> <Play /> Start a room</Button>
                         <Button variant="glass" size="xl" onClick={() => {
-                            setIsRegisterOpen(false);
-                            setIsLoginOpen(true);
+                            if (currentUser) {
+                                navigate("/room");
+                            } else {
+                                setIsRegisterOpen(false);
+                                setIsLoginOpen(true);
+                            }
                         }}> Join with code</Button>
                     </div>
                     <div className="hero__stats">

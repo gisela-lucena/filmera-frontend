@@ -4,7 +4,7 @@ import { useState } from "react";
 import Login from "../Login/Login";
 import Register from "../Register/Register";
 
-const Navbar = () => {
+const Navbar = ({ currentUser, onLogin, onLogout }) => {
     const [isLoginOpen, setIsLoginOpen] = useState(false);
     const [isRegisterOpen, setIsRegisterOpen] = useState(false);
     return (
@@ -33,7 +33,10 @@ const Navbar = () => {
             <Login
                 open={isLoginOpen}
                 onClose={() => setIsLoginOpen(false)}
-                onSwitchToRegister={() => { setIsLoginOpen(false); setIsRegisterOpen(true); }}
+                onSwitchToRegister={() => {
+                    setIsLoginOpen(false);
+                    setIsRegisterOpen(true);
+                }}
                 onLogin={onLogin}
             />
             <Register

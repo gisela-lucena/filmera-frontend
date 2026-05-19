@@ -130,6 +130,8 @@ export default function Room() {
                     setMovies(normalizedMovies);
                 }
                 if (roomData.matchedMovie) {
+                    const normalizedMatch = normalizeMovies([roomData.matchedMovie])[0];
+
                     setMatched(roomData.matchedMovie);
                     setStage("matched");
                 }

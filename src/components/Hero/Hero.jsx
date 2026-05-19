@@ -7,7 +7,7 @@ import Login from "../Login/Login"
 import Register from "../Register/Register";
 import { useNavigate } from "react-router-dom";
 
-const Hero = ({ isAuthChecked }) => {
+const Hero = ({ currentUser, onLogin }) => {
     const [isLoginOpen, setIsLoginOpen] = useState(false);
     const [isRegisterOpen, setIsRegisterOpen] = useState(false);
     const navigate = useNavigate();
@@ -26,11 +26,9 @@ const Hero = ({ isAuthChecked }) => {
                     </p>
                     <div className="hero__actions">
                         <Button variant="hero" size="xl" onClick={() => {
-                            if (isAuthChecked) {
+                            if (currentUser) {
                                 navigate("/room");
-                            }
-                            console.log(isAuthChecked);
-                            if (!isAuthChecked) {
+                            } else {
                                 setIsRegisterOpen(false);
                                 setIsLoginOpen(true);
                             }
@@ -71,6 +69,7 @@ const Hero = ({ isAuthChecked }) => {
                     setIsLoginOpen(false);
                     setIsRegisterOpen(true);
                 }}
+                onLogin={onLogin}
             />
             <Register
                 open={isRegisterOpen}

@@ -7,7 +7,7 @@ import SwipeDemo from "../components/SwipeDemo/SwipeDemo";
 import CTA from "../components/CTA/CTA";
 import Footer from "../components/Footer/Footer";
 
-const Index = ({ currentUser, onLogin, onLogout, isAuthChecked }) => (
+const Index = ({ currentUser, onLogin, onLogout }) => (
     <main className="page">
         <Navbar
             currentUser={currentUser}
@@ -15,7 +15,8 @@ const Index = ({ currentUser, onLogin, onLogout, isAuthChecked }) => (
             onLogout={onLogout}
         />
         <Hero
-            isAuthChecked={isAuthChecked}
+            currentUser={currentUser}
+            onLogin={onLogin}
         />
         <Problem />
         <HowItWorks />

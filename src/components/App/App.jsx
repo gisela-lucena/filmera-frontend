@@ -43,7 +43,6 @@ const App = () => {
         };
         checkToken();
     }, []);
-    console.log(isAuthChecked);
     if (!isAuthChecked) {
         return null;
     }

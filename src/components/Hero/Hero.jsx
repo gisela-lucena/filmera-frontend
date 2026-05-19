@@ -29,6 +29,7 @@ const Hero = ({ isAuthChecked }) => {
                             if (isAuthChecked) {
                                 navigate("/room");
                             }
+                            console.log(isAuthChecked);
                             if (!isAuthChecked) {
                                 setIsRegisterOpen(false);
                                 setIsLoginOpen(true);

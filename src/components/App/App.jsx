@@ -3,28 +3,69 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Index from "../../pages/Index.jsx";
 import NotFound from "../../pages/NotFound/NotFound.jsx";
 import Room from "../../pages/Room/Room.jsx";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import api from "../../utils/Api.js";
 
 const queryClient = new QueryClient();
 
 const App = () => {
     const [currentUser, setCurrentUser] = useState(null);
-    const handleLogin = (data) => {
-        setCurrentUser(data.user);
+    const [isAuthChecked, setIsAuthChecked] = useState(false);
+
+    const handleLogin = async (data) => {
+        localStorage.setItem("jwt", data.token);
+        const user = await api.getCurrentUser();
+        setCurrentUser(user.user || user);
     };
+
+    const handleLogout = () => {
+        localStorage.removeItem("jwt");
+        setCurrentUser(null);
+    };
+
+    useEffect(() => {
+        const checkToken = async () => {
+            const token = localStorage.getItem("jwt");
+            if (!token) {
+                setIsAuthChecked(true);
+                return;
+            }
+
+            try {
+                const user = await api.getCurrentUser();
+                setCurrentUser(user.user || user);
+            } catch (err) {
+                localStorage.removeItem("jwt");
+                setCurrentUser(null);
+            } finally {
+                setIsAuthChecked(true);
+            }
+        };
+        checkToken();
+    }, []);
+    if (!isAuthChecked) {
+        return null;
+    }
     return (
         <QueryClientProvider client={queryClient}>
             <BrowserRouter>
                 <Routes>
-                    <Route path="/" element={<Index currentUser={currentUser}
-                        onLogin={handleLogin} />} />
-                    <Route path="/room" element={<Room />} />
-                    <Route path="/room/:code" element={<Room />} />
+                    <Route
+                        path="/"
+                        element={
+                            <Index
+                                currentUser={currentUser}
+                                onLogin={handleLogin}
+                                onLogout={handleLogout}
+                            />
+                        } />
+                    <Route path="/room" element={<Room currentUser={currentUser} />} />
+                    <Route path="/room/:code" element={<Room currentUser={currentUser} />} />
                     <Route path="*" element={<NotFound />} />
                 </Routes>
             </BrowserRouter>
         </QueryClientProvider>
-    )
+    );
 };
 
 export default App;

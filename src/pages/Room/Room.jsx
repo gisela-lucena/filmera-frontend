@@ -23,6 +23,16 @@ const SORTS = [
 const YEARS = ["any", ...Array.from({ length: 30 }, (_, i) =>
     String(new Date().getFullYear() - i))];
 
+const normalizeMovies = (movies = []) =>
+    movies.map((movie) => ({
+        id: movie.id || movie.tmdbId,
+        title: movie.title,
+        year: movie.year,
+        rating: movie.rating,
+        overview: movie.overview,
+        poster: movie.poster || null,
+    }));
+
 export default function Room() {
     const { code: urlCode } = useParams();
     const navigate = useNavigate();
@@ -87,12 +97,13 @@ export default function Room() {
 
                 const room = await api.joinRoom(urlCode);
                 const roomData = room.room || room;
+                const normalizedMovies = normalizeMovies(roomData.movies || []);
 
                 setCode(roomData.code);
                 setParticipants(roomData.participants || []);
-                setMovies(roomData.movies || []);
+                setMovies(normalizedMovies);
                 setIsHost(false);
-                setStage(roomData.movies?.length ? "swiping" : "waiting");
+                setStage(normalizedMovies.length ? "swiping" : "waiting");
             } catch (err) {
                 setError(err.message);
                 setStage("lobby");
@@ -104,6 +115,29 @@ export default function Room() {
         autoJoinRoom();
     }, [urlCode]);
 
+    useEffect(() => {
+        if (!code || stage === "swiping" || stage === "matched") return;
+
+        const intervalId = setInterval(async () => {
+            try {
+                const data = await api.getRoom(code);
+                const roomData = data.room || data;
+                const normalizedMovies = normalizeMovies(roomData.movies || []);
+
+                setParticipants(roomData.participants || []);
+
+                if (normalizedMovies.length) {
+                    setMovies(normalizedMovies);
+                    setStage("swiping");
+                }
+            } catch (err) {
+                console.error("Failed to refresh room:", err);
+            }
+        }, 3000);
+
+        return () => clearInterval(intervalId);
+    }, [code, stage]);
+
     const joinRoom = async () => {
         const roomCode = joinInput.trim().toUpperCase();
         if (!roomCode) return;
@@ -113,12 +147,13 @@ export default function Room() {
             setError("");
             const room = await api.joinRoom(roomCode);
             const roomData = room.room || room;
+            const normalizedMovies = normalizeMovies(roomData.movies || []);
 
             setCode(roomData.code);
             setParticipants(roomData.participants || []);
-            setMovies(roomData.movies || []);
+            setMovies(normalizedMovies);
             setIsHost(false);
-            setStage(roomData.movies?.length ? "swiping" : "waiting");
+            setStage(normalizedMovies.length ? "swiping" : "waiting");
             navigate(`/room/${roomCode}`);
         } catch (err) {
             setError(err.message);

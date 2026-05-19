@@ -34,6 +34,7 @@ const Navbar = () => {
                 open={isLoginOpen}
                 onClose={() => setIsLoginOpen(false)}
                 onSwitchToRegister={() => { setIsLoginOpen(false); setIsRegisterOpen(true); }}
+                onLogin={onLogin}
             />
             <Register
                 open={isRegisterOpen}

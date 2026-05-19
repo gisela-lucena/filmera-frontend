@@ -9,7 +9,11 @@ import Footer from "../components/Footer/Footer";
 
 const Index = () => (
     <main className="page">
-        <Navbar />
+        <Navbar
+            currentUser={currentUser}
+            onLogin={onLogin}
+            onLogout={onLogout}
+        />
         <Hero />
         <Problem />
         <HowItWorks />
@@ -18,7 +22,7 @@ const Index = () => (
         <CTA />
         <Footer />
     </main>
-    
+
 );
 
 export default Index;

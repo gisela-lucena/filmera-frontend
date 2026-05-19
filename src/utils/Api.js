@@ -96,7 +96,7 @@ class Api {
       method: "POST",
       body: JSON.stringify({
         roomCode,
-        movieId: movie.id,
+        movieId: movie.id || movie.tmdbId,
         liked,
       }),
     });

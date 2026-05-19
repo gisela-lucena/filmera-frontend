@@ -13,11 +13,11 @@ const Login = ({ open, onClose, onSwitchToRegister, onLogin }) => {
         e.preventDefault();
         try {
             const data = await api.signin({ email, password });
-            localStorage.setItem("jwt", data.token);
+            await onLogin(data);
+
             setEmail("");
             setPassword("");
             onClose();
-            console.log("before navigate");
             navigate("/room");
 
             console.log("after navigate");

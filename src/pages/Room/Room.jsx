@@ -4,6 +4,8 @@ import { Heart, X, Star, Copy, ArrowLeft, Users, Play } from "lucide-react";
 import { Button } from "../../components/ui/Button";
 import "./room.css";
 import api from "../../utils/Api.js";
+import Login from "../../components/Login/Login";
+import Register from "../../components/Register/Register";
 
 const GENRES = [
     { id: 28, name: "Action" }, { id: 12, name: "Adventure" }, { id: 16, name: "Animation" },
@@ -33,7 +35,7 @@ const normalizeMovies = (movies = []) =>
         poster: movie.poster || null,
     }));
 
-export default function Room() {
+export default function Room({ currentUser, onLogin }) {
     const { code: urlCode } = useParams();
     const navigate = useNavigate();
 
@@ -54,6 +56,15 @@ export default function Room() {
     const [year, setYear] = useState("any");
     const [sort, setSort] = useState("popularity.desc");
     const [isHost, setIsHost] = useState(false);
+
+    const [isLoginOpen, setIsLoginOpen] = useState(!currentUser);
+    const [isRegisterOpen, setIsRegisterOpen] = useState(false);
+
+    useEffect(() => {
+        if (currentUser) {
+            setIsLoginOpen(false);
+        }
+    }, [currentUser]);
 
     const createRoom = async () => {
         try {
@@ -113,10 +124,10 @@ export default function Room() {
         };
 
         autoJoinRoom();
-    }, [urlCode]);
+    }, [urlCode, currentUser]);
 
     useEffect(() => {
-        if (!code || stage === "matched") return;
+        if (!code || !currentUser || stage === "matched") return;
 
         const intervalId = setInterval(async () => {
             try {
@@ -141,7 +152,7 @@ export default function Room() {
         }, 3000);
 
         return () => clearInterval(intervalId);
-    }, [code, stage, movies.length]);
+    }, [code, currentUser, stage, movies.length]);
 
     const joinRoom = async () => {
         const roomCode = joinInput.trim().toUpperCase();
@@ -270,6 +281,30 @@ export default function Room() {
         setIsHost(false);
         navigate("/room");
     };
+
+    if (!currentUser) {
+        return (
+            <main className="page room-page">
+                <Login
+                    open={isLoginOpen}
+                    onClose={() => setIsLoginOpen(false)}
+                    onSwitchToRegister={() => {
+                        setIsLoginOpen(false);
+                        setIsRegisterOpen(true);
+                    }}
+                    onLogin={onLogin}
+                />
+                <Register
+                    open={isRegisterOpen}
+                    onClose={() => setIsRegisterOpen(false)}
+                    onSwitchToLogin={() => {
+                        setIsRegisterOpen(false);
+                        setIsLoginOpen(true);
+                    }}
+                />
+            </main>
+        );
+    }
 
     const movie = movies[index];
 
@@ -443,7 +478,11 @@ export default function Room() {
                         <p className="room__lead">{matched.overview}</p>
                         {matched.poster && <img className="room__match-poster" src={matched.poster} alt={matched.title} />}
                         <div className="room__actions-center">
-                            <Button variant="hero" size="xl" onClick={() => { setMatched(null); setStage("swiping"); setIndex(i => i + 1); }}>
+                            <Button variant="hero" size="xl" onClick={() => {
+                                setMatched(null);
+                                setStage("swiping");
+                                setIndex(i => i + 1);
+                            }}>
                                 Keep swiping
                             </Button>
                             <Button variant="glass" size="xl" onClick={leaveRoom}>Leave room</Button>

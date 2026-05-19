@@ -60,8 +60,8 @@ const App = () => {
                                 isAuthChecked={isAuthChecked}
                             />
                         } />
-                    <Route path="/room" element={<Room currentUser={currentUser} />} />
-                    <Route path="/room/:code" element={<Room currentUser={currentUser} />} />
+                    <Route path="/room" element={<Room currentUser={currentUser} onLogin={handleLogin} />} />
+                    <Route path="/room/:code" element={<Room currentUser={currentUser} onLogin={handleLogin} />} />
                     <Route path="*" element={<NotFound />} />
                 </Routes>
             </BrowserRouter>

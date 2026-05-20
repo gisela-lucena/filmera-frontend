@@ -3,6 +3,7 @@ import { Button } from "../ui/Button";
 import { useState, useEffect } from "react";
 import Login from "../Login/Login";
 import Register from "../Register/Register";
+import { LogOut } from 'lucide-react';
 
 const Navbar = ({ currentUser, onLogin, onLogout, shouldOpenLogin, redirectAfterLogin }) => {
     const [isLoginOpen, setIsLoginOpen] = useState(false);
@@ -42,8 +43,7 @@ const Navbar = ({ currentUser, onLogin, onLogout, shouldOpenLogin, redirectAfter
                             size="sm"
                             onClick={onLogout}
                         >
-                            {currentUser.name} • Logout
-                        </Button>
+                            <LogOut /> {currentUser.name} </Button>
                     </div>
                 )}
             </nav>
@@ -62,7 +62,7 @@ const Navbar = ({ currentUser, onLogin, onLogout, shouldOpenLogin, redirectAfter
                 onClose={() => setIsRegisterOpen(false)}
                 onSwitchToLogin={() => { setIsRegisterOpen(false); setIsLoginOpen(true); }}
             />
-        </header>
+        </header >
     );
 };
 export default Navbar;

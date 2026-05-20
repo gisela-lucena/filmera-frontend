@@ -26,16 +26,26 @@ const Navbar = ({ currentUser, onLogin, onLogout, shouldOpenLogin, redirectAfter
                     <a href="#features">Features</a>
                     <a href="#demo">Try demo</a>
                 </div>
-                <div className="navbar__actions">
-                    <Button variant="glass" size="sm" onClick={() => {
-                        setIsLoginOpen(false);
-                        setIsRegisterOpen(true);
-                    }}> Register </Button>
-                    <Button variant="hero" size="sm" onClick={() => {
-                        setIsRegisterOpen(false);
-                        setIsLoginOpen(true);
-                    }}> Login </Button>
-                </div>
+                {!currentUser ? (
+                    <div className="navbar__actions">
+                        <Button variant="glass" size="sm" onClick={() => {
+                            setIsLoginOpen(false);
+                            setIsRegisterOpen(true);
+                        }}> Register </Button>
+                        <Button variant="hero" size="sm" onClick={() => {
+                            setIsRegisterOpen(false);
+                            setIsLoginOpen(true);
+                        }}> Login </Button>
+                    </div>) : (<div className="navbar__actions">
+                        <Button
+                            variant="glass"
+                            size="sm"
+                            onClick={onLogout}
+                        >
+                            {currentUser.name} • Logout
+                        </Button>
+                    </div>
+                )}
             </nav>
             <Login
                 open={isLoginOpen}

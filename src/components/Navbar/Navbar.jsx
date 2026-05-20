@@ -1,6 +1,6 @@
 import logo from "../../images/filmera-logo.png";
 import { Button } from "../ui/Button";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Login from "../Login/Login";
 import Register from "../Register/Register";
 

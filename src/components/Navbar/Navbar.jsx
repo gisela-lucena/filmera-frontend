@@ -4,9 +4,16 @@ import { useState } from "react";
 import Login from "../Login/Login";
 import Register from "../Register/Register";
 
-const Navbar = ({ currentUser, onLogin, onLogout }) => {
+const Navbar = ({ currentUser, onLogin, onLogout, shouldOpenLogin, redirectAfterLogin }) => {
     const [isLoginOpen, setIsLoginOpen] = useState(false);
     const [isRegisterOpen, setIsRegisterOpen] = useState(false);
+
+    useEffect(() => {
+        if (shouldOpenLogin) {
+            setIsLoginOpen(true);
+        }
+    }, [shouldOpenLogin]);
+
     return (
         <header className="navbar">
             <nav className="container navbar__nav">
@@ -38,6 +45,7 @@ const Navbar = ({ currentUser, onLogin, onLogout }) => {
                     setIsRegisterOpen(true);
                 }}
                 onLogin={onLogin}
+                redirectAfterLogin={redirectAfterLogin}
             />
             <Register
                 open={isRegisterOpen}

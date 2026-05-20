@@ -16,7 +16,9 @@
 .btn:disabled {
   opacity: 0.5;
   pointer-events: none;
+  cursor: not-allowed;
 }
+
 .btn svg {
   width: 1.1em;
   height: 1.1em;

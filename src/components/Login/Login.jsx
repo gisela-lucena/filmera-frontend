@@ -4,10 +4,16 @@ import { Button } from "../ui/Button";
 import api from "../../utils/Api";
 import { useNavigate } from "react-router-dom";
 
-const Login = ({ open, onClose, onSwitchToRegister, onLogin }) => {
+const Login = ({ open, onClose, onSwitchToRegister, onLogin,
+    redirectAfterLogin = "/room", }) => {
     const navigate = useNavigate();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+
+    const isFormValid =
+        email.trim() &&
+        password.trim() &&
+        password.length >= 8;
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -21,7 +27,7 @@ const Login = ({ open, onClose, onSwitchToRegister, onLogin }) => {
             setEmail("");
             setPassword("");
             onClose();
-            navigate("/room");
+            navigate(redirectAfterLogin);
         } catch (err) {
             console.error("Login failed:", err);
         }
@@ -54,7 +60,7 @@ const Login = ({ open, onClose, onSwitchToRegister, onLogin }) => {
                         required
                     />
                 </div>
-                <Button type="submit" variant="hero" size="md" className="modal__submit">
+                <Button type="submit" variant="hero" size="md" className="modal__submit" disabled={!isFormValid}>
                     Log in
                 </Button>
             </form>

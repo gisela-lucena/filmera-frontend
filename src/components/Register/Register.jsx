@@ -8,6 +8,11 @@ const Register = ({ open, onClose, onSwitchToLogin }) => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
+    const isFormValid =
+        email.trim() &&
+        password.trim() &&
+        password.length >= 8;
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
@@ -60,7 +65,7 @@ const Register = ({ open, onClose, onSwitchToLogin }) => {
                         minLength={8}
                     />
                 </div>
-                <Button type="submit" variant="hero" size="md" className="modal__submit">
+                <Button type="submit" variant="hero" size="md" className="modal__submit" disabled={!isFormValid}>
                     Create account
                 </Button>
             </form>

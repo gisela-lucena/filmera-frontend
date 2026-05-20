@@ -6,26 +6,32 @@ import Features from "../components/Features/Features";
 import SwipeDemo from "../components/SwipeDemo/SwipeDemo";
 import CTA from "../components/CTA/CTA";
 import Footer from "../components/Footer/Footer";
+import { useLocation } from "react-router-dom";
 
-const Index = ({ currentUser, onLogin, onLogout }) => (
-    <main className="page">
-        <Navbar
-            currentUser={currentUser}
-            onLogin={onLogin}
-            onLogout={onLogout}
-        />
-        <Hero
-            currentUser={currentUser}
-            onLogin={onLogin}
-        />
-        <Problem />
-        <HowItWorks />
-        <Features />
-        <SwipeDemo />
-        <CTA />
-        <Footer />
-    </main>
+const Index = ({ currentUser, onLogin, onLogout }) => {
+    const location = useLocation();
+    return (
+        <main className="page">
+            <Navbar
+                currentUser={currentUser}
+                onLogin={onLogin}
+                onLogout={onLogout}
+                shouldOpenLogin={location.state?.openLogin}
+                redirectAfterLogin={location.state?.from}
+            />
+            <Hero
+                currentUser={currentUser}
+                onLogin={onLogin}
+            />
+            <Problem />
+            <HowItWorks />
+            <Features />
+            <SwipeDemo />
+            <CTA />
+            <Footer />
+        </main>
 
-);
+    );
+};
 
 export default Index;

@@ -5,6 +5,7 @@ import NotFound from "../../pages/NotFound/NotFound.jsx";
 import Room from "../../pages/Room/Room.jsx";
 import { useState, useEffect } from "react";
 import api from "../../utils/Api.js";
+import ProtectedRoute from "../ProtectedRoute/ProtectedRoute.jsx";
 
 const queryClient = new QueryClient();
 
@@ -60,8 +61,12 @@ const App = () => {
                                 isAuthChecked={isAuthChecked}
                             />
                         } />
-                    <Route path="/room" element={<Room currentUser={currentUser} onLogin={handleLogin} />} />
-                    <Route path="/room/:code" element={<Room currentUser={currentUser} onLogin={handleLogin} />} />
+                    <Route path="/room" element={<ProtectedRoute currentUser={currentUser}>
+                        <Room currentUser={currentUser} onLogin={handleLogin} />
+                    </ProtectedRoute>} />
+                    <Route path="/room/:code" element={<ProtectedRoute currentUser={currentUser}>
+                        <Room currentUser={currentUser} onLogin={handleLogin} />
+                    </ProtectedRoute>} />
                     <Route path="*" element={<NotFound />} />
                 </Routes>
             </BrowserRouter>

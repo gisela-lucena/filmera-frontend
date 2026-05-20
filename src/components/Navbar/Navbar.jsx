@@ -42,8 +42,9 @@ const Navbar = ({ currentUser, onLogin, onLogout, shouldOpenLogin, redirectAfter
                             variant="glass"
                             size="sm"
                             onClick={onLogout}
-                        >
-                            <LogOut /> {currentUser.name} </Button>
+                        >{currentUser.name}
+                            <LogOut />
+                        </Button>
                     </div>
                 )}
             </nav>

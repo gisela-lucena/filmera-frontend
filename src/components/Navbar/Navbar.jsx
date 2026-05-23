@@ -1,19 +1,13 @@
 import logo from "../../images/filmera-logo.png";
 import { Button } from "../ui/Button";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Login from "../Login/Login";
 import Register from "../Register/Register";
 import { LogOut } from 'lucide-react';
 
 const Navbar = ({ currentUser, onLogin, onLogout, shouldOpenLogin, redirectAfterLogin }) => {
-    const [isLoginOpen, setIsLoginOpen] = useState(false);
+    const [isLoginOpen, setIsLoginOpen] = useState(Boolean(shouldOpenLogin));
     const [isRegisterOpen, setIsRegisterOpen] = useState(false);
-
-    useEffect(() => {
-        if (shouldOpenLogin) {
-            setIsLoginOpen(true);
-        }
-    }, [shouldOpenLogin]);
 
     return (
         <header className="navbar">

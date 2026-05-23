@@ -30,7 +30,6 @@ const SwipeDemo = () => {
     }, []);
 
     const movie = movies.length ? movies[index % movies.length] : null;
-    const next = movies.length ? movies[(index + 1) % movies.length] : null;
 
     const swipe = (dir) => {
         setDirection(dir);

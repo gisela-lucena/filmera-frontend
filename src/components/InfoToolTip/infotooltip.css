@@ -27,7 +27,7 @@
 }
 
 .info-tooltip_error {
-  background: rgb(255 255 255 / 0.05);
+  background: hsl(var(--accent-foreground));
   color: hsl(var(--foreground));
   backdrop-filter: blur(8px);
 }

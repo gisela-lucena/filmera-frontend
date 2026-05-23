@@ -1,7 +1,6 @@
 import { useState } from "react";
 import Modal from "../Modal/Modal";
 import { Button } from "../ui/Button";
-import api from "../../utils/Api";
 import { useNavigate } from "react-router-dom";
 
 const Login = ({ open, onClose, onSwitchToRegister, onLogin,
@@ -18,11 +17,7 @@ const Login = ({ open, onClose, onSwitchToRegister, onLogin,
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const data = await api.signin({ email, password });
-            localStorage.setItem("jwt", data.token);
-            if (onLogin) {
-                await onLogin(data);
-            }
+            await onLogin({ email, password });
 
             setEmail("");
             setPassword("");

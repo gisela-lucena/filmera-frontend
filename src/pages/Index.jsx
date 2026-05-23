@@ -8,7 +8,7 @@ import CTA from "../components/CTA/CTA";
 import Footer from "../components/Footer/Footer";
 import { useLocation } from "react-router-dom";
 
-const Index = ({ currentUser, onLogin, onLogou, setTooltip }) => {
+const Index = ({ currentUser, onLogin, onLogout, setTooltip }) => {
     const location = useLocation();
     return (
         <main className="page">

@@ -9,22 +9,25 @@
 }
 
 .info-tooltip__icon {
-  font-size: 48px;
+  font-size: 80px;
   font-weight: bold;
   margin-bottom: 16px;
 }
 
 .info-tooltip__message {
-  font-size: 16px;
+  font-size: 20px;
   line-height: 1.5;
+  font-weight: 800;
 }
 
 .info-tooltip_success {
-  background-color: #d4edda;
-  color: #155724;
+  background: var(--gradient-accent);
+  color: hsl(var(--accent-foreground));
+  backdrop-filter: blur(8px);
 }
 
 .info-tooltip_error {
-  background-color: #f8d7da;
-  color: #721c24;
+  background: rgb(255 255 255 / 0.05);
+  color: hsl(var(--foreground));
+  backdrop-filter: blur(8px);
 }

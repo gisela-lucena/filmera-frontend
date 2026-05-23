@@ -15,5 +15,5 @@
 @import "./components/SwipeDemo/swipe.css";
 @import "./pages/NotFound/notfound.css";
 @import "./components/Modal/modal.css";
-@import "./components/Room/room.css";
-@import "./components/InfoToolTip/tooltip.css";
+@import "./pages/Room/room.css";
+@import "./components/InfoToolTip/infotooltip.css";

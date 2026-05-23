@@ -17,12 +17,14 @@ const Login = ({ open, onClose, onSwitchToRegister, onLogin,
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            await onLogin({ email, password });
+            const user = await onLogin({ email, password });
 
-            setEmail("");
-            setPassword("");
-            onClose();
-            navigate(redirectAfterLogin);
+            if (user) {
+                setEmail("");
+                setPassword("");
+                onClose();
+                navigate(redirectAfterLogin);
+            }
         } catch (err) {
             console.error("Login failed:", err);
         }

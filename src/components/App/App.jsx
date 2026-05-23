@@ -13,10 +13,13 @@ const App = () => {
     const [currentUser, setCurrentUser] = useState(null);
     const [isAuthChecked, setIsAuthChecked] = useState(false);
 
-    const handleLogin = async (data) => {
+    const handleLogin = async ({ email, password }) => {
+        const data = await api.signin({ email, password });
+
         localStorage.setItem("jwt", data.token);
         const user = await api.getCurrentUser();
         setCurrentUser(user.user || user);
+        return user.user || user;
     };
 
     const handleLogout = () => {

@@ -3,7 +3,7 @@ import Modal from "../Modal/Modal";
 import { Button } from "../ui/Button";
 import api from "../../utils/Api";
 
-const Register = ({ open, onClose, onSwitchToLogin }) => {
+const Register = ({ open, onClose, onSwitchToLogin, setTooltip }) => {
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");

@@ -4,7 +4,7 @@ import { Button } from "../ui/Button";
 import { useNavigate } from "react-router-dom";
 
 const Login = ({ open, onClose, onSwitchToRegister, onLogin,
-    redirectAfterLogin = "/room", }) => {
+    redirectAfterLogin = "/room", setTooltip }) => {
     const navigate = useNavigate();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");

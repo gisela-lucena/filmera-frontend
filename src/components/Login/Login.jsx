@@ -26,9 +26,13 @@ const Login = ({ open, onClose, onSwitchToRegister, onLogin,
                 navigate(redirectAfterLogin);
             }
         } catch (err) {
-            console.error("Login failed:", err);
+            setTooltip({
+                isOpen: true,
+                isSuccess: false,
+                message: err.message || "Something went wrong",
+            });
         }
-    };
+    }
 
     return (
         <Modal open={open} onClose={onClose}>

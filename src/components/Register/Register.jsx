@@ -21,8 +21,18 @@ const Register = ({ open, onClose, onSwitchToLogin }) => {
             setEmail("");
             setPassword("");
             onSwitchToLogin();
+
+            setTooltip({
+                isOpen: true,
+                isSuccess: true,
+                message: "Account created successfully!",
+            });
         } catch (err) {
-            console.error("Register failed:", err);
+            setTooltip({
+                isOpen: true,
+                isSuccess: false,
+                message: err.message || "Failed to create account",
+            });
         }
     };
 

@@ -8,7 +8,7 @@ import CTA from "../components/CTA/CTA";
 import Footer from "../components/Footer/Footer";
 import { useLocation } from "react-router-dom";
 
-const Index = ({ currentUser, onLogin, onLogout }) => {
+const Index = ({ currentUser, onLogin, onLogou, setTooltip }) => {
     const location = useLocation();
     return (
         <main className="page">
@@ -22,12 +22,17 @@ const Index = ({ currentUser, onLogin, onLogout }) => {
             <Hero
                 currentUser={currentUser}
                 onLogin={onLogin}
+                setTooltip={setTooltip}
             />
             <Problem />
             <HowItWorks />
             <Features />
             <SwipeDemo />
-            <CTA currentUser={currentUser} onLogin={onLogin} />
+            <CTA
+                currentUser={currentUser}
+                onLogin={onLogin}
+                setTooltip={setTooltip}
+            />
             <Footer />
         </main>
 

@@ -1,0 +1,39 @@
+.info-tooltip {
+  position: relative;
+  width: 100%;
+  max-width: 420px;
+  padding: 32px 24px;
+  border-radius: 16px;
+  text-align: center;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+.info-tooltip__icon {
+  font-size: 48px;
+  font-weight: bold;
+  margin-bottom: 16px;
+}
+
+.info-tooltip__message {
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+.info-tooltip_success {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.info-tooltip_error {
+  background-color: #f8d7da;
+  color: #721c24;
+}
+
+.info-tooltip__close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}

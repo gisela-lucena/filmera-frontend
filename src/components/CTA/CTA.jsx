@@ -35,6 +35,7 @@ const CTA = ({ currentUser, onLogin }) => {
           setIsLoginOpen(false);
           setIsRegisterOpen(true);
         }}
+        onLogin={onLogin}
       />
       <Register
         open={isRegisterOpen}

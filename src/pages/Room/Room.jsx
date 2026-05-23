@@ -149,7 +149,7 @@ export default function Room({ currentUser, onLogin }) {
             } catch (err) {
                 console.error("Failed to refresh room:", err);
             }
-        }, 3000);
+        }, );
 
         return () => clearInterval(intervalId);
     }, [code, currentUser, stage, movies.length]);

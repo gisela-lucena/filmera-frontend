@@ -3,10 +3,12 @@ import { Button } from "../ui/Button";
 import Login from "../Login/Login";
 import Register from "../Register/Register";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
-const CTA = () => {
+const CTA = ({ currentUser, onLogin }) => {
   const [isLoginOpen, setIsLoginOpen] = useState(false);
   const [isRegisterOpen, setIsRegisterOpen] = useState(false);
+  const navigate = useNavigate();
   return (
     <section className="container section">
       <div className="cta">
@@ -17,8 +19,12 @@ const CTA = () => {
         <p className="cta__lead">Stop arguing over the remote. Start a FILMERA room and let the swipes choose for you.</p>
         <div className="cta__actions">
           <Button variant="hero" size="xl" onClick={() => {
-            setIsLoginOpen(false);
-            setIsRegisterOpen(true);
+            if (currentUser) {
+              navigate("/room");
+            } else {
+              setIsRegisterOpen(false);
+              setIsLoginOpen(true);
+            }
           }}>Create your first room</Button>
         </div>
       </div>
@@ -29,6 +35,7 @@ const CTA = () => {
           setIsLoginOpen(false);
           setIsRegisterOpen(true);
         }}
+        onLogin={onLogin}
       />
       <Register
         open={isRegisterOpen}

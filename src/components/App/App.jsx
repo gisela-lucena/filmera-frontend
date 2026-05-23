@@ -4,6 +4,7 @@ import Index from "../../pages/Index.jsx";
 import NotFound from "../../pages/NotFound/NotFound.jsx";
 import Room from "../../pages/Room/Room.jsx";
 import { useState, useEffect } from "react";
+import { flushSync } from "react-dom";
 import api from "../../utils/Api.js";
 import ProtectedRoute from "../ProtectedRoute/ProtectedRoute.jsx";
 
@@ -13,10 +14,16 @@ const App = () => {
     const [currentUser, setCurrentUser] = useState(null);
     const [isAuthChecked, setIsAuthChecked] = useState(false);
 
-    const handleLogin = async (data) => {
+    const handleLogin = async ({ email, password }) => {
+        const data = await api.signin({ email, password });
+
         localStorage.setItem("jwt", data.token);
         const user = await api.getCurrentUser();
-        setCurrentUser(user.user || user);
+        const currentUserData = user.user || user;
+        flushSync(() => {
+            setCurrentUser(currentUserData);
+        });
+        return currentUserData;
     };
 
     const handleLogout = () => {
@@ -35,7 +42,7 @@ const App = () => {
             try {
                 const user = await api.getCurrentUser();
                 setCurrentUser(user.user || user);
-            } catch (err) {
+            } catch {
                 localStorage.removeItem("jwt");
                 setCurrentUser(null);
             } finally {

@@ -60,12 +60,6 @@ export default function Room({ currentUser, onLogin }) {
     const [isLoginOpen, setIsLoginOpen] = useState(!currentUser);
     const [isRegisterOpen, setIsRegisterOpen] = useState(false);
 
-    useEffect(() => {
-        if (currentUser) {
-            setIsLoginOpen(false);
-        }
-    }, [currentUser]);
-
     const createRoom = async () => {
         try {
             setLoading(true);
@@ -143,7 +137,7 @@ export default function Room({ currentUser, onLogin }) {
                 if (roomData.matchedMovie) {
                     const normalizedMatch = normalizeMovies([roomData.matchedMovie])[0];
 
-                    setMatched(roomData.matchedMovie);
+                    setMatched(normalizedMatch);
                     setStage("matched");
                 }
             } catch (err) {

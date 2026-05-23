@@ -7,12 +7,18 @@ import { useState, useEffect } from "react";
 import { flushSync } from "react-dom";
 import api from "../../utils/Api.js";
 import ProtectedRoute from "../ProtectedRoute/ProtectedRoute.jsx";
+import InfoToolTip from "../InfoToolTip/InfoToolTip.jsx";
 
 const queryClient = new QueryClient();
 
 const App = () => {
     const [currentUser, setCurrentUser] = useState(null);
     const [isAuthChecked, setIsAuthChecked] = useState(false);
+    const [tooltip, setTooltip] = useState({
+        isOpen: false,
+        isSuccess: false,
+        message: "",
+    });
 
     const handleLogin = async ({ email, password }) => {
         const data = await api.signin({ email, password });
@@ -77,6 +83,18 @@ const App = () => {
                     </ProtectedRoute>} />
                     <Route path="*" element={<NotFound />} />
                 </Routes>
+                <InfoToolTip
+                    isOpen={tooltip.isOpen}
+                    isSuccess={tooltip.isSuccess}
+                    message={tooltip.message}
+                    onClose={() =>
+                        setTooltip({
+                            isOpen: false,
+                            isSuccess: false,
+                            message: "",
+                        })
+                    }
+                />
             </BrowserRouter>
         </QueryClientProvider>
     );

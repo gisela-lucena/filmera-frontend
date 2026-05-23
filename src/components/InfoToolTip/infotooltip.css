@@ -21,8 +21,8 @@
 }
 
 .info-tooltip_success {
-  background: var(--gradient-accent);
-  color: hsl(var(--accent-foreground));
+  background: hsl(var(--accent-foreground));
+  color: var(--gradient-accent);
   backdrop-filter: blur(8px);
 }
 

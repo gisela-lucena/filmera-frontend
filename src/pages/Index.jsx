@@ -27,8 +27,7 @@ const Index = ({ currentUser, onLogin, onLogout }) => {
             <HowItWorks />
             <Features />
             <SwipeDemo />
-            <CTA />
-            <Footer />
+            <CTA currentUser={currentUser} onLogin={handleLogin} />            <Footer />
         </main>
 
     );

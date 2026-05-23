@@ -31,8 +31,6 @@ const CTA = ({ currentUser, onLogin, setTooltip }) => {
       <Login
         open={isLoginOpen}
         onClose={() => setIsLoginOpen(false)}
-        onLogin={onLogin}
-        setTooltip={setTooltip}
         onSwitchToRegister={() => {
           setIsLoginOpen(false);
           setIsRegisterOpen(true);

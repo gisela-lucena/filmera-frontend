@@ -26,12 +26,6 @@ export default function InfoToolTip({
         };
     }, [isOpen, onClose]);
 
-    function handleOverlayClick(event) {
-        if (event.target === event.currentTarget) {
-            onClose();
-        }
-    }
-
     return (
         <Modal open={isOpen} onClose={onClose}>
             <div className={`info-tooltip ${isSuccess ?

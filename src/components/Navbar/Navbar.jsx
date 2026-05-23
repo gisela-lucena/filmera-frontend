@@ -5,7 +5,7 @@ import Login from "../Login/Login";
 import Register from "../Register/Register";
 import { LogOut } from 'lucide-react';
 
-const Navbar = ({ currentUser, onLogin, onLogout, shouldOpenLogin, redirectAfterLogin }) => {
+const Navbar = ({ currentUser, onLogin, onLogout, shouldOpenLogin, redirectAfterLogin, setTooltip }) => {
     const [isLoginOpen, setIsLoginOpen] = useState(Boolean(shouldOpenLogin));
     const [isRegisterOpen, setIsRegisterOpen] = useState(false);
 
@@ -55,6 +55,7 @@ const Navbar = ({ currentUser, onLogin, onLogout, shouldOpenLogin, redirectAfter
             <Register
                 open={isRegisterOpen}
                 onClose={() => setIsRegisterOpen(false)}
+                setTooltip={setTooltip}
                 onSwitchToLogin={() => { setIsRegisterOpen(false); setIsLoginOpen(true); }}
             />
         </header >

@@ -35,7 +35,7 @@ const normalizeMovies = (movies = []) =>
         poster: movie.poster || null,
     }));
 
-export default function Room({ currentUser, onLogin }) {
+export default function Room({ currentUser, onLogin, setTooltip }) {
     const { code: urlCode } = useParams();
     const navigate = useNavigate();
 
@@ -291,6 +291,7 @@ export default function Room({ currentUser, onLogin }) {
                 <Register
                     open={isRegisterOpen}
                     onClose={() => setIsRegisterOpen(false)}
+                    setTooltip={setTooltip}
                     onSwitchToLogin={() => {
                         setIsRegisterOpen(false);
                         setIsLoginOpen(true);

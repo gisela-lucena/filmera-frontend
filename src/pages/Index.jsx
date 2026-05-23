@@ -18,6 +18,7 @@ const Index = ({ currentUser, onLogin, onLogout, setTooltip }) => {
                 onLogout={onLogout}
                 shouldOpenLogin={location.state?.openLogin}
                 redirectAfterLogin={location.state?.from}
+                setTooltip={setTooltip}
             />
             <Hero
                 currentUser={currentUser}

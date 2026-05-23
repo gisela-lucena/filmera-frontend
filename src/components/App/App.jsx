@@ -76,10 +76,10 @@ const App = () => {
                             />
                         } />
                     <Route path="/room" element={<ProtectedRoute currentUser={currentUser}>
-                        <Room currentUser={currentUser} onLogin={handleLogin} />
+                        <Room currentUser={currentUser} onLogin={handleLogin} setTooltip={setTooltip} />
                     </ProtectedRoute>} />
                     <Route path="/room/:code" element={<ProtectedRoute currentUser={currentUser}>
-                        <Room currentUser={currentUser} onLogin={handleLogin} />
+                        <Room currentUser={currentUser} onLogin={handleLogin} setTooltip={setTooltip} />
                     </ProtectedRoute>} />
                     <Route path="*" element={<NotFound />} />
                 </Routes>

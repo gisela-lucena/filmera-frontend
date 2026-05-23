@@ -7,7 +7,7 @@ import Login from "../Login/Login"
 import Register from "../Register/Register";
 import { useNavigate } from "react-router-dom";
 
-const Hero = ({ currentUser, onLogin }) => {
+const Hero = ({ currentUser, onLogin, setTooltip }) => {
     const [isLoginOpen, setIsLoginOpen] = useState(false);
     const [isRegisterOpen, setIsRegisterOpen] = useState(false);
     const navigate = useNavigate();
@@ -78,6 +78,7 @@ const Hero = ({ currentUser, onLogin }) => {
             <Register
                 open={isRegisterOpen}
                 onClose={() => setIsRegisterOpen(false)}
+                setTooltip={setTooltip}
                 onSwitchToLogin={() => {
                     setIsRegisterOpen(false);
                     setIsLoginOpen(true);

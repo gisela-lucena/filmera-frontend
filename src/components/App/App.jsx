@@ -66,6 +66,7 @@ const App = () => {
                                 onLogin={handleLogin}
                                 onLogout={handleLogout}
                                 isAuthChecked={isAuthChecked}
+                                setTooltip={setTooltip}
                             />
                         } />
                     <Route path="/room" element={<ProtectedRoute currentUser={currentUser}>

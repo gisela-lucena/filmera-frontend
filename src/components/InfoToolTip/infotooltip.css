@@ -28,12 +28,3 @@
   background-color: #f8d7da;
   color: #721c24;
 }
-
-.info-tooltip__close {
-  position: absolute;
-  top: 12px;
-  right: 12px;
-  background: transparent;
-  border: none;
-  cursor: pointer;
-}

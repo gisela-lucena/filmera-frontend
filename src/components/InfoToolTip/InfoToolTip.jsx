@@ -33,10 +33,6 @@ export default function InfoToolTip({
                 role="alertdialog"
                 aria-live="assertive"
             >
-                <button className="info-tooltip__close"
-                    onClick={onClose} aria-label="Close">
-                    <X size={18} />
-                </button>
                 <div className="info-tooltip__icon">
                     {isSuccess ? "✓" : "✗"}
                 </div>

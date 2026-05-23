@@ -35,11 +35,8 @@ const CTA = ({ currentUser, onLogin }) => {
           setIsLoginOpen(false);
           setIsRegisterOpen(true);
         }}
-        onLogin={async (credentials) => {
-          await onLogin(credentials);
-          setIsLoginOpen(false);
-          navigate("/room");
-        }} />
+        onLogin={onLogin}
+      />
       <Register
         open={isRegisterOpen}
         onClose={() => setIsRegisterOpen(false)}

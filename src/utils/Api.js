@@ -51,15 +51,24 @@ class Api {
     return this._request("/users/me");
   }
 
-  createRoom({ filters }) {
+  createRoom({ filters } = {}) {
+    const body = filters ? { filters } : {};
+
     return this._request("/rooms", {
       method: "POST",
-      body: JSON.stringify({ filters }),
+      body: JSON.stringify(body),
     });
   }
 
   getRoom(roomCode) {
     return this._request(`/rooms/${roomCode}`);
+  }
+
+  updateRoomFilters(roomCode, filters) {
+    return this._request(`/rooms/${roomCode}/filters`, {
+      method: "PATCH",
+      body: JSON.stringify({ filters }),
+    });
   }
 
   joinRoom(roomCode) {

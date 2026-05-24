@@ -64,13 +64,7 @@ export default function Room({ currentUser, onLogin, setTooltip }) {
         try {
             setLoading(true);
             setError("");
-            const room = await api.createRoom({
-                filters: {
-                    genres: selectedGenres,
-                    year,
-                    sort,
-                },
-            });
+            const room = await api.createRoom();
             const roomData = room.room || room;
             const roomCode = roomData.code;
             const normalizedMovies = normalizeMovies(roomData.movies || []);
@@ -186,7 +180,11 @@ export default function Room({ currentUser, onLogin, setTooltip }) {
             setLoading(true);
             setError("");
 
-            const room = await api.getRoom(code);
+            const room = await api.updateRoomFilters(code, {
+                genres: selectedGenres,
+                year,
+                sort,
+            });
             const roomData = room.room || room;
             const list = normalizeMovies(roomData.movies || []);
 

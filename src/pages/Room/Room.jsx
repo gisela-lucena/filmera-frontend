@@ -73,9 +73,11 @@ export default function Room({ currentUser, onLogin, setTooltip }) {
             });
             const roomData = room.room || room;
             const roomCode = roomData.code;
+            const normalizedMovies = normalizeMovies(roomData.movies || []);
 
             setCode(roomCode);
             setParticipants(roomData.participants || []);
+            setMovies(normalizedMovies);
             setIsHost(true);
             setStage("config");
             createdRoomRef.current = true;
@@ -179,47 +181,19 @@ export default function Room({ currentUser, onLogin, setTooltip }) {
                 : [...currentGenres, id],
         );
     };
-    const fetchMovies = async () => {
-        setLoading(true);
-        setError("");
-
+    const startGame = async () => {
         try {
-            const data = await api.getDiscoverMovies({
-                genres: selectedGenres,
-                year,
-                sort,
-            });
+            setLoading(true);
+            setError("");
 
-            const list = (data.movies || []).slice(0, 20).map((movie) => ({
-                id: movie.tmdbId,
-                title: movie.title,
-                year: movie.year,
-                rating: Number(movie.rating).toFixed(1),
-                overview: movie.overview,
-                poster: movie.poster || null,
-            }));
+            const room = await api.getRoom(code);
+            const roomData = room.room || room;
+            const list = normalizeMovies(roomData.movies || []);
 
             if (!list.length) {
                 throw new Error("No movies found for those filters.");
             }
 
-            return list;
-        } catch (e) {
-            setError(e.message);
-            return null;
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    const startGame = async () => {
-        const list = await fetchMovies();
-        if (!list) return;
-        try {
-            setLoading(true);
-            setError("");
-
-            await Promise.all(list.map((movie) => api.addMovieToRoom(code, movie)));
             setMovies(list);
             setIndex(0);
             setMatched(null);

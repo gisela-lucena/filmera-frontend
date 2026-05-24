@@ -22,12 +22,12 @@
 
 .info-tooltip_success {
   background: hsl(var(--accent-foreground));
-  color: var(--gradient-accent);
+  color: hsl(48 100% 50% / 0.15);
   backdrop-filter: blur(8px);
 }
 
 .info-tooltip_error {
   background: hsl(var(--accent-foreground));
-  color: hsl(var(--foreground));
+  color: hsl(280 85% 35% / 0.6);
   backdrop-filter: blur(8px);
 }

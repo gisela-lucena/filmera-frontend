@@ -4,7 +4,7 @@ import { Button } from "../ui/Button";
 import { useNavigate } from "react-router-dom";
 
 const Login = ({ open, onClose, onSwitchToRegister, onLogin,
-    redirectAfterLogin = "/room", setTooltip }) => {
+    onForgotPassword, redirectAfterLogin = "/room", setTooltip = () => {} }) => {
     const navigate = useNavigate();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -60,6 +60,25 @@ const Login = ({ open, onClose, onSwitchToRegister, onLogin,
                         onChange={(e) => setPassword(e.target.value)}
                         required
                     />
+                    <div className="modal__help">
+                        <button
+                            type="button"
+                            className="modal__link modal__forgot"
+                            onClick={() => {
+                                if (typeof onForgotPassword === "function") {
+                                    onForgotPassword();
+                                    return;
+                                }
+                                setTooltip({
+                                    isOpen: true,
+                                    isSuccess: false,
+                                    message: "Password reset is not available yet.",
+                                });
+                            }}
+                        >
+                            Forgot your password?
+                        </button>
+                    </div>
                 </div>
                 <Button type="submit" variant="hero" size="md" className="modal__submit" disabled={!isFormValid}>
                     Log in

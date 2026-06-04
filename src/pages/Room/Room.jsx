@@ -49,6 +49,7 @@ export default function Room({ currentUser, onLogin, setTooltip }) {
     const [index, setIndex] = useState(0);
     const [direction, setDirection] = useState(null);
     const [matched, setMatched] = useState(null);
+    const [isOverviewExpanded, setIsOverviewExpanded] = useState(false);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
 
@@ -248,6 +249,18 @@ export default function Room({ currentUser, onLogin, setTooltip }) {
         navigate("/room");
     };
 
+    const movie = movies[index];
+    const hasLongOverview = Boolean(movie?.overview && movie.overview.length > 140);
+
+    useEffect(() => {
+        setIsOverviewExpanded(false);
+    }, [movie?.id]);
+
+    const toggleOverview = () => {
+        if (!hasLongOverview) return;
+        setIsOverviewExpanded((current) => !current);
+    };
+
     if (!currentUser) {
         return (
             <main className="page room-page">
@@ -272,8 +285,6 @@ export default function Room({ currentUser, onLogin, setTooltip }) {
             </main>
         );
     }
-
-    const movie = movies[index];
 
     const overlayBadge =
         direction === "right" ? <div className="room__badge room__badge--like">LIKE</div> :
@@ -424,7 +435,25 @@ export default function Room({ currentUser, onLogin, setTooltip }) {
                                         <div className="room__movie-info">
                                             <div className="room__meta"><Star /> {movie.rating} • {movie.year}</div>
                                             <h3 className="room__movie-title">{movie.title}</h3>
-                                            <p className="room__movie-overview">{movie.overview?.slice(0, 140)}{movie.overview?.length > 140 ? "…" : ""}</p>
+                                            <p
+                                                className={`room__movie-overview ${hasLongOverview ? "room__movie-overview--clickable" : ""} ${isOverviewExpanded ? "room__movie-overview--expanded" : ""}`}
+                                                role={hasLongOverview ? "button" : undefined}
+                                                tabIndex={hasLongOverview ? 0 : undefined}
+                                                aria-expanded={isOverviewExpanded}
+                                                aria-label={hasLongOverview ? `${isOverviewExpanded ? "Collapse" : "Expand"} synopsis` : undefined}
+                                                onClick={toggleOverview}
+                                                onKeyDown={(event) => {
+                                                    if (!hasLongOverview) return;
+                                                    if (event.key === "Enter" || event.key === " ") {
+                                                        event.preventDefault();
+                                                        toggleOverview();
+                                                    }
+                                                }}
+                                            >
+                                                {isOverviewExpanded
+                                                    ? (movie.overview || "No synopsis available.")
+                                                    : `${movie.overview?.slice(0, 140) || "No synopsis available."}${movie.overview?.length > 140 ? "…" : ""}`}
+                                            </p>
                                         </div>
                                     </div>
                                 </div>

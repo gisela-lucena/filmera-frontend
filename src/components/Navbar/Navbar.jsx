@@ -51,6 +51,7 @@ const Navbar = ({ currentUser, onLogin, onLogout, shouldOpenLogin, redirectAfter
                 }}
                 onLogin={onLogin}
                 redirectAfterLogin={redirectAfterLogin}
+                setTooltip={setTooltip}
             />
             <Register
                 open={isRegisterOpen}

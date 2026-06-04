@@ -64,11 +64,35 @@ const Login = ({ open, onClose, onSwitchToRegister, onLogin,
                         <button
                             type="button"
                             className="modal__link modal__forgot"
-                            onClick={() => {
-                                if (typeof onForgotPassword === "function") {
-                                    onForgotPassword();
+                            onClick={async () => {
+                                const trimmedEmail = email.trim();
+                                if (!trimmedEmail) {
+                                    setTooltip({
+                                        isOpen: true,
+                                        isSuccess: false,
+                                        message: "Enter your email first.",
+                                    });
                                     return;
                                 }
+
+                                if (typeof onForgotPassword === "function") {
+                                    try {
+                                        await onForgotPassword({ email: trimmedEmail });
+                                        setTooltip({
+                                            isOpen: true,
+                                            isSuccess: true,
+                                            message: "Password reset instructions sent.",
+                                        });
+                                    } catch (err) {
+                                        setTooltip({
+                                            isOpen: true,
+                                            isSuccess: false,
+                                            message: err.message || "Could not request password reset.",
+                                        });
+                                    }
+                                    return;
+                                }
+
                                 setTooltip({
                                     isOpen: true,
                                     isSuccess: false,

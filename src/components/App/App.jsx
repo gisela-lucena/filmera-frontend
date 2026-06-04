@@ -32,6 +32,10 @@ const App = () => {
         return currentUserData;
     };
 
+    const handleForgotPassword = ({ email }) => {
+        return api.forgotPassword({ email });
+    };
+
     const handleLogout = () => {
         localStorage.removeItem("jwt");
         setCurrentUser(null);
@@ -70,16 +74,27 @@ const App = () => {
                             <Index
                                 currentUser={currentUser}
                                 onLogin={handleLogin}
+                                onForgotPassword={handleForgotPassword}
                                 onLogout={handleLogout}
                                 isAuthChecked={isAuthChecked}
                                 setTooltip={setTooltip}
                             />
                         } />
                     <Route path="/room" element={<ProtectedRoute currentUser={currentUser}>
-                        <Room currentUser={currentUser} onLogin={handleLogin} setTooltip={setTooltip} />
+                        <Room
+                            currentUser={currentUser}
+                            onLogin={handleLogin}
+                            onForgotPassword={handleForgotPassword}
+                            setTooltip={setTooltip}
+                        />
                     </ProtectedRoute>} />
                     <Route path="/room/:code" element={<ProtectedRoute currentUser={currentUser}>
-                        <Room currentUser={currentUser} onLogin={handleLogin} setTooltip={setTooltip} />
+                        <Room
+                            currentUser={currentUser}
+                            onLogin={handleLogin}
+                            onForgotPassword={handleForgotPassword}
+                            setTooltip={setTooltip}
+                        />
                     </ProtectedRoute>} />
                     <Route path="*" element={<NotFound />} />
                 </Routes>

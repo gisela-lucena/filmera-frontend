@@ -47,6 +47,13 @@ class Api {
     });
   }
 
+  forgotPassword({ email }) {
+    return this._request("/forgot-password", {
+      method: "POST",
+      body: JSON.stringify({ email }),
+    });
+  }
+
   getCurrentUser() {
     return this._request("/users/me");
   }

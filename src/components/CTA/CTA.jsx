@@ -5,7 +5,7 @@ import Register from "../Register/Register";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-const CTA = ({ currentUser, onLogin, setTooltip }) => {
+const CTA = ({ currentUser, onLogin, onForgotPassword, setTooltip }) => {
   const [isLoginOpen, setIsLoginOpen] = useState(false);
   const [isRegisterOpen, setIsRegisterOpen] = useState(false);
   const navigate = useNavigate();
@@ -36,6 +36,8 @@ const CTA = ({ currentUser, onLogin, setTooltip }) => {
           setIsRegisterOpen(true);
         }}
         onLogin={onLogin}
+        onForgotPassword={onForgotPassword}
+        setTooltip={setTooltip}
       />
       <Register
         open={isRegisterOpen}

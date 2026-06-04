@@ -8,13 +8,14 @@ import CTA from "../components/CTA/CTA";
 import Footer from "../components/Footer/Footer";
 import { useLocation } from "react-router-dom";
 
-const Index = ({ currentUser, onLogin, onLogout, setTooltip }) => {
+const Index = ({ currentUser, onLogin, onForgotPassword, onLogout, setTooltip }) => {
     const location = useLocation();
     return (
         <main className="page">
             <Navbar
                 currentUser={currentUser}
                 onLogin={onLogin}
+                onForgotPassword={onForgotPassword}
                 onLogout={onLogout}
                 shouldOpenLogin={location.state?.openLogin}
                 redirectAfterLogin={location.state?.from}
@@ -23,6 +24,7 @@ const Index = ({ currentUser, onLogin, onLogout, setTooltip }) => {
             <Hero
                 currentUser={currentUser}
                 onLogin={onLogin}
+                onForgotPassword={onForgotPassword}
                 setTooltip={setTooltip}
             />
             <Problem />
@@ -32,6 +34,7 @@ const Index = ({ currentUser, onLogin, onLogout, setTooltip }) => {
             <CTA
                 currentUser={currentUser}
                 onLogin={onLogin}
+                onForgotPassword={onForgotPassword}
                 setTooltip={setTooltip}
             />
             <Footer />

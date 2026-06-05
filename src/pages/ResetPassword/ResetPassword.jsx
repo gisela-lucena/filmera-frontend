@@ -2,6 +2,7 @@ import { useMemo, useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import api from "../../utils/Api";
 import { Button } from "../../components/ui/Button";
+import logo from "../../images/filmera-logo.png";
 
 const ResetPassword = ({ setTooltip = () => {} }) => {
     const [searchParams] = useSearchParams();
@@ -61,7 +62,10 @@ const ResetPassword = ({ setTooltip = () => {} }) => {
     return (
         <main className="reset-password page">
             <section className="reset-password__panel">
-                <Link to="/" className="reset-password__brand">FILM<span>ERA</span></Link>
+                <Link to="/" className="reset-password__brand">
+                    <img src={logo} alt="FILMERA logo" width={40} height={40} />
+                    <span className="reset-password__brand-text">FILM<span>ERA</span></span>
+                </Link>
                 <h1 className="reset-password__title">Reset password</h1>
                 <p className="reset-password__subtitle">Create a new password for your account.</p>
                 <form className="modal__form" onSubmit={handleSubmit}>

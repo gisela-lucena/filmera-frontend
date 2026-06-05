@@ -14,6 +14,7 @@
 @import "./components/Footer/footer.css";
 @import "./components/SwipeDemo/swipe.css";
 @import "./pages/NotFound/notfound.css";
+@import "./pages/ResetPassword/reset-password.css";
 @import "./components/Modal/modal.css";
 @import "./pages/Room/room.css";
 @import "./components/InfoToolTip/infotooltip.css";

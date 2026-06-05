@@ -54,6 +54,13 @@ class Api {
     });
   }
 
+  resetPassword({ token, password }) {
+    return this._request("/reset-password", {
+      method: "POST",
+      body: JSON.stringify({ token, password }),
+    });
+  }
+
   getCurrentUser() {
     return this._request("/users/me");
   }

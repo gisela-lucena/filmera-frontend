@@ -2,6 +2,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Index from "../../pages/Index.jsx";
 import NotFound from "../../pages/NotFound/NotFound.jsx";
+import ResetPassword from "../../pages/ResetPassword/ResetPassword.jsx";
 import Room from "../../pages/Room/Room.jsx";
 import { useState, useEffect } from "react";
 import { flushSync } from "react-dom";
@@ -96,6 +97,7 @@ const App = () => {
                             setTooltip={setTooltip}
                         />
                     </ProtectedRoute>} />
+                    <Route path="/reset-password" element={<ResetPassword setTooltip={setTooltip} />} />
                     <Route path="*" element={<NotFound />} />
                 </Routes>
                 <InfoToolTip

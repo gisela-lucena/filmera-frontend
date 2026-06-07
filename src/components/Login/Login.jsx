@@ -1,6 +1,7 @@
 import { useState } from "react";
 import Modal from "../Modal/Modal";
 import { Button } from "../ui/Button";
+import PasswordInput from "../ui/PasswordInput";
 import { useNavigate } from "react-router-dom";
 
 const Login = ({ open, onClose, onSwitchToRegister, onLogin,
@@ -52,12 +53,11 @@ const Login = ({ open, onClose, onSwitchToRegister, onLogin,
                 </div>
                 <div className="modal__field">
                     <label className="modal__label" htmlFor="login-password">Password</label>
-                    <input
+                    <PasswordInput
                         id="login-password"
-                        type="password"
-                        className="modal__input"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
+                        autoComplete="current-password"
                         required
                     />
                     <div className="modal__help">

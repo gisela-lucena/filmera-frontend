@@ -2,6 +2,7 @@ import { useMemo, useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import api from "../../utils/Api";
 import { Button } from "../../components/ui/Button";
+import PasswordInput from "../../components/ui/PasswordInput";
 
 const ResetPassword = ({ setTooltip = () => { } }) => {
     const [searchParams] = useSearchParams();
@@ -10,12 +11,14 @@ const ResetPassword = ({ setTooltip = () => { } }) => {
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const hasPasswordConfirmation = confirmPassword.length > 0;
+    const passwordsMatch = password === confirmPassword;
 
     const isFormValid =
         token &&
         password.length >= 8 &&
         confirmPassword.length >= 8 &&
-        password === confirmPassword;
+        passwordsMatch;
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -29,7 +32,7 @@ const ResetPassword = ({ setTooltip = () => { } }) => {
             return;
         }
 
-        if (password !== confirmPassword) {
+        if (!passwordsMatch) {
             setTooltip({
                 isOpen: true,
                 isSuccess: false,
@@ -69,27 +72,36 @@ const ResetPassword = ({ setTooltip = () => { } }) => {
                 <form className="modal__form" onSubmit={handleSubmit}>
                     <div className="modal__field">
                         <label className="modal__label" htmlFor="reset-password">New password</label>
-                        <input
+                        <PasswordInput
                             id="reset-password"
-                            type="password"
-                            className="modal__input"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
+                            autoComplete="new-password"
                             minLength={8}
                             required
                         />
                     </div>
                     <div className="modal__field">
                         <label className="modal__label" htmlFor="reset-confirm-password">Confirm password</label>
-                        <input
+                        <PasswordInput
                             id="reset-confirm-password"
-                            type="password"
-                            className="modal__input"
                             value={confirmPassword}
                             onChange={(e) => setConfirmPassword(e.target.value)}
+                            autoComplete="new-password"
                             minLength={8}
                             required
+                            aria-invalid={hasPasswordConfirmation && !passwordsMatch}
+                            aria-describedby={hasPasswordConfirmation ? "reset-password-match" : undefined}
                         />
+                        {hasPasswordConfirmation && (
+                            <p
+                                id="reset-password-match"
+                                className={`modal__validation ${passwordsMatch ? "modal__validation--success" : "modal__validation--error"}`}
+                                role="status"
+                            >
+                                {passwordsMatch ? "Passwords match." : "Passwords do not match."}
+                            </p>
+                        )}
                     </div>
                     <Button
                         type="submit"

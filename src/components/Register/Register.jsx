@@ -1,25 +1,42 @@
 import { useState } from "react";
 import Modal from "../Modal/Modal";
 import { Button } from "../ui/Button";
+import PasswordInput from "../ui/PasswordInput";
 import api from "../../utils/Api";
 
 const Register = ({ open, onClose, onSwitchToLogin, setTooltip = () => {} }) => {
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [confirmPassword, setConfirmPassword] = useState("");
+    const hasPasswordConfirmation = confirmPassword.length > 0;
+    const passwordsMatch = password === confirmPassword;
 
     const isFormValid =
         email.trim() &&
         password.trim() &&
-        password.length >= 8;
+        password.length >= 8 &&
+        confirmPassword.length >= 8 &&
+        passwordsMatch;
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        if (!passwordsMatch) {
+            setTooltip({
+                isOpen: true,
+                isSuccess: false,
+                message: "Passwords do not match.",
+            });
+            return;
+        }
+
         try {
             await api.signup({ name, email, password });
             setName("");
             setEmail("");
             setPassword("");
+            setConfirmPassword("");
             onSwitchToLogin();
 
             setTooltip({
@@ -65,15 +82,36 @@ const Register = ({ open, onClose, onSwitchToLogin, setTooltip = () => {} }) => 
                 </div>
                 <div className="modal__field">
                     <label className="modal__label" htmlFor="register-password">Password</label>
-                    <input
+                    <PasswordInput
                         id="register-password"
-                        type="password"
-                        className="modal__input"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
+                        autoComplete="new-password"
                         required
                         minLength={8}
                     />
+                </div>
+                <div className="modal__field">
+                    <label className="modal__label" htmlFor="register-confirm-password">Confirm password</label>
+                    <PasswordInput
+                        id="register-confirm-password"
+                        value={confirmPassword}
+                        onChange={(e) => setConfirmPassword(e.target.value)}
+                        autoComplete="new-password"
+                        minLength={8}
+                        required
+                        aria-invalid={hasPasswordConfirmation && !passwordsMatch}
+                        aria-describedby={hasPasswordConfirmation ? "register-password-match" : undefined}
+                    />
+                    {hasPasswordConfirmation && (
+                        <p
+                            id="register-password-match"
+                            className={`modal__validation ${passwordsMatch ? "modal__validation--success" : "modal__validation--error"}`}
+                            role="status"
+                        >
+                            {passwordsMatch ? "Passwords match." : "Passwords do not match."}
+                        </p>
+                    )}
                 </div>
                 <Button type="submit" variant="hero" size="md" className="modal__submit" disabled={!isFormValid}>
                     Create account

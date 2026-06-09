@@ -253,6 +253,16 @@ export default function Room({ currentUser, onLogin, onForgotPassword, setToolti
     const hasLongOverview = Boolean(movie?.overview && movie.overview.length > 140);
 
     useEffect(() => {
+        movies.slice(index, index + 4).forEach((nextMovie) => {
+            if (!nextMovie.poster) return;
+
+            const image = new Image();
+            image.src = nextMovie.poster;
+            image.decode?.().catch(() => {});
+        });
+    }, [index, movies]);
+
+    useEffect(() => {
         setIsOverviewExpanded(false);
     }, [movie?.id]);
 

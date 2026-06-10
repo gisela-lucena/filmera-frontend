@@ -15,6 +15,7 @@
 @import "./components/SwipeDemo/swipe.css";
 @import "./pages/NotFound/notfound.css";
 @import "./pages/ResetPassword/reset-password.css";
+@import "./pages/Privacy/privacy.css";
 @import "./components/Modal/modal.css";
 @import "./pages/Room/room.css";
 @import "./components/InfoToolTip/infotooltip.css";

@@ -113,6 +113,17 @@ const Register = ({ open, onClose, onSwitchToLogin, setTooltip = () => {} }) => 
                         </p>
                     )}
                 </div>
+                <p className="modal__consent">
+                    By creating an account, you agree to our{" "}
+                    <a href="/privacy" target="_blank" rel="noreferrer">
+                        Privacy Policy
+                    </a>{" "}
+                    and{" "}
+                    <a href="/terms" target="_blank" rel="noreferrer">
+                        Terms of Use
+                    </a>
+                    .
+                </p>
                 <Button type="submit" variant="hero" size="md" className="modal__submit" disabled={!isFormValid}>
                     Create account
                 </Button>

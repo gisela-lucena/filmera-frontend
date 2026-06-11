@@ -132,6 +132,20 @@
 .modal__validation--error {
   color: hsl(0 82% 68%);
 }
+.modal__consent {
+  margin: 0;
+  color: hsl(var(--muted-foreground));
+  font-size: 0.75rem;
+  line-height: 1.5;
+  text-align: center;
+}
+.modal__consent a {
+  color: hsl(var(--accent));
+  font-weight: 700;
+}
+.modal__consent a:hover {
+  text-decoration: underline;
+}
 .modal__submit {
   margin-top: 0.5rem;
   width: 100%;

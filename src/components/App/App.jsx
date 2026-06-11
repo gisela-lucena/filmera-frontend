@@ -5,6 +5,7 @@ import NotFound from "../../pages/NotFound/NotFound.jsx";
 import Privacy from "../../pages/Privacy/Privacy.jsx";
 import ResetPassword from "../../pages/ResetPassword/ResetPassword.jsx";
 import Room from "../../pages/Room/Room.jsx";
+import Terms from "../../pages/Terms/Terms.jsx";
 import { useState, useEffect } from "react";
 import { flushSync } from "react-dom";
 import api from "../../utils/Api.js";
@@ -99,6 +100,7 @@ const App = () => {
                         />
                     </ProtectedRoute>} />
                     <Route path="/privacy" element={<Privacy />} />
+                    <Route path="/terms" element={<Terms />} />
                     <Route path="/reset-password" element={<ResetPassword setTooltip={setTooltip} />} />
                     <Route path="*" element={<NotFound />} />
                 </Routes>

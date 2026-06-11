@@ -10,6 +10,7 @@ const Footer = () => (
       </div>
       <div className="footer__links">
         <a href="/privacy">Privacy</a>
+        <a href="/terms">Terms</a>
         <a href="mailto:privacy@filmera.us">Contact</a>
       </div>
       <p>Movie data by TMDB</p>

@@ -208,7 +208,7 @@ const Terms = () => (
           <h2>Contact</h2>
           <p>
             For questions about these Terms, email
-            <a href="mailto:privacy@filmera.us"> privacy@filmera.us</a>.
+            <a href="mailto:support@filmera.us"> support@filmera.us</a>.
           </p>
         </section>
       </div>

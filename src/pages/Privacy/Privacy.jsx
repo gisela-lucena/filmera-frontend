@@ -137,7 +137,7 @@ const Privacy = () => (
           </p>
           <p>
             You may also request access, correction, or deletion by emailing
-            <a href="mailto:privacy@filmera.us"> privacy@filmera.us</a> from the
+            <a href="mailto:support@filmera.us"> support@filmera.us</a> from the
             address associated with your account. We may need to verify your
             identity before completing a request.
           </p>
@@ -175,7 +175,7 @@ const Privacy = () => (
           <h2>Contact</h2>
           <p>
             For privacy questions or requests, email
-            <a href="mailto:privacy@filmera.us"> privacy@filmera.us</a>.
+            <a href="mailto:support@filmera.us"> support@filmera.us</a>.
           </p>
         </section>
       </div>

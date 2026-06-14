@@ -1,5 +1,6 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
+import DeleteAccount from "../../pages/DeleteAccount/DeleteAccount.jsx";
 import Index from "../../pages/Index.jsx";
 import NotFound from "../../pages/NotFound/NotFound.jsx";
 import Privacy from "../../pages/Privacy/Privacy.jsx";
@@ -101,6 +102,7 @@ const App = () => {
                     </ProtectedRoute>} />
                     <Route path="/privacy" element={<Privacy />} />
                     <Route path="/terms" element={<Terms />} />
+                    <Route path="/delete-account" element={<DeleteAccount />} />
                     <Route path="/reset-password" element={<ResetPassword setTooltip={setTooltip} />} />
                     <Route path="*" element={<NotFound />} />
                 </Routes>

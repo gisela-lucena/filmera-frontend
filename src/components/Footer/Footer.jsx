@@ -11,6 +11,7 @@ const Footer = () => (
       <div className="footer__links">
         <a href="/privacy">Privacy</a>
         <a href="/terms">Terms</a>
+        <a href="/delete-account">Delete account</a>
         <a href="mailto:support@filmera.us">Contact</a>
       </div>
       <p>Movie data by TMDB</p>

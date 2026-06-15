@@ -61,6 +61,13 @@ class Api {
     });
   }
 
+  createLead({ email }) {
+    return this._request("/leads", {
+      method: "POST",
+      body: JSON.stringify({ email }),
+    });
+  }
+
   getCurrentUser() {
     return this._request("/users/me");
   }

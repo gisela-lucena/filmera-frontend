@@ -49,7 +49,7 @@ export default function Room({ currentUser, onLogin, onForgotPassword, setToolti
     const [index, setIndex] = useState(0);
     const [direction, setDirection] = useState(null);
     const [matched, setMatched] = useState(null);
-    const [isOverviewExpanded, setIsOverviewExpanded] = useState(false);
+    const [expandedOverviewMovieId, setExpandedOverviewMovieId] = useState(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
 
@@ -251,6 +251,7 @@ export default function Room({ currentUser, onLogin, onForgotPassword, setToolti
 
     const movie = movies[index];
     const hasLongOverview = Boolean(movie?.overview && movie.overview.length > 140);
+    const isOverviewExpanded = expandedOverviewMovieId === movie?.id;
 
     useEffect(() => {
         movies.slice(index, index + 4).forEach((nextMovie) => {
@@ -262,13 +263,11 @@ export default function Room({ currentUser, onLogin, onForgotPassword, setToolti
         });
     }, [index, movies]);
 
-    useEffect(() => {
-        setIsOverviewExpanded(false);
-    }, [movie?.id]);
-
     const toggleOverview = () => {
         if (!hasLongOverview) return;
-        setIsOverviewExpanded((current) => !current);
+        setExpandedOverviewMovieId((currentMovieId) =>
+            currentMovieId === movie.id ? null : movie.id
+        );
     };
 
     if (!currentUser) {

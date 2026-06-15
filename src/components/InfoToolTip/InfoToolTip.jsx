@@ -1,5 +1,4 @@
 import { useEffect } from "react";
-import { X } from "lucide-react";
 import Modal from "../Modal/Modal";
 
 export default function InfoToolTip({

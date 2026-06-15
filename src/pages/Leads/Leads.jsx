@@ -32,12 +32,11 @@ const Leads = () => {
       <div className="leads-page__glow leads-page__glow--bottom" />
 
       <section className="leads-page__content">
-        <Link to="/" className="leads-page__brand" aria-label="Filmera home">
-          <img src={logo} alt="" width="72" height="72" />
-          <span>FILM<span>ERA</span></span>
+        <Link to="/" className="leads-page__brand-name" aria-label="Filmera home">
+          FILM<span>ERA</span>
         </Link>
 
-        <p className="leads-page__eyebrow">Coming soon</p>
+        {/* <p className="leads-page__eyebrow">Coming soon</p> */}
         <h1>We're almost ready for the App Store and Google Play.</h1>
         <p className="leads-page__subtitle">
           Want to be the first to know? Get notified when we launch.
@@ -74,6 +73,14 @@ const Leads = () => {
         </form>
 
         <p className="leads-page__note">No spam. Just one message when we're live.</p>
+
+        <Link to="/" className="leads-page__brand-logo" aria-label="Filmera home">
+          <img src={logo} alt="" width="128" height="128" />
+        </Link>
+
+        <footer className="leads-page__footer">
+          &copy; {new Date().getFullYear()} Filmera. All rights reserved.
+        </footer>
       </section>
     </main>
   );

@@ -511,7 +511,6 @@ export default function Room({ currentUser, onLogin, onForgotPassword, setToolti
                         </div>
 
                         <h3 className="room__h3">Streaming</h3>
-                        <p className="room__muted">Only include movies available on these providers.</p>
                         <div className="room__chips">
                             {STREAMING_PROVIDERS.map((provider) => (
                                 <button
@@ -540,9 +539,6 @@ export default function Room({ currentUser, onLogin, onForgotPassword, setToolti
                         <div className="room__participants">
                             <Users /> {participants.length} in room
                         </div>
-                        <p className="room__realtime">
-                            Realtime: {realtimeStatus === "connected" ? "connected" : "reconnecting"}
-                        </p>
 
                         {error && <p className="room__error">{error}</p>}
 
@@ -576,9 +572,6 @@ export default function Room({ currentUser, onLogin, onForgotPassword, setToolti
                                 <div className="room__participants">
                                     <Users /> {participants.length} in room
                                 </div>
-                                <p className="room__realtime">
-                                    Realtime: {realtimeStatus === "connected" ? "connected" : "reconnecting"}
-                                </p>
                                 <button className="room__copy" onClick={copyShare}>
                                     <Copy /> Share link
                                 </button>
@@ -593,9 +586,6 @@ export default function Room({ currentUser, onLogin, onForgotPassword, setToolti
                             <div>
                                 <p className="room__muted">Room</p>
                                 <h2 className="room__code">{code}</h2>
-                                <p className="room__realtime">
-                                    Realtime: {realtimeStatus === "connected" ? "connected" : "reconnecting"}
-                                </p>
                             </div>
                             <div className="room__participants"><Users /> {participants.length}</div>
                         </div>
@@ -630,13 +620,25 @@ export default function Room({ currentUser, onLogin, onForgotPassword, setToolti
                                                     <p>{movieCreditsError}</p>
                                                 ) : (
                                                     <>
-                                                        <p><strong>Director:</strong> {movieCredits?.director || "Unknown"}</p>
-                                                        <p>
-                                                            <strong>Cast:</strong>{" "}
-                                                            {movieCredits?.cast?.length
-                                                                ? movieCredits.cast.join(", ")
-                                                                : "Not available"}
-                                                        </p>
+                                                        <p className="room__details-kicker">Movie details</p>
+                                                        <div className="room__details-section">
+                                                            <span className="room__details-label">Director</span>
+                                                            <strong>{movieCredits?.director || "Unknown"}</strong>
+                                                        </div>
+                                                        <div className="room__details-section">
+                                                            <span className="room__details-label">Cast</span>
+                                                            {movieCredits?.cast?.length ? (
+                                                                <div className="room__cast-list">
+                                                                    {movieCredits.cast.map((castMember) => (
+                                                                        <span className="room__cast-chip" key={castMember}>
+                                                                            {castMember}
+                                                                        </span>
+                                                                    ))}
+                                                                </div>
+                                                            ) : (
+                                                                <strong>Not available</strong>
+                                                            )}
+                                                        </div>
                                                     </>
                                                 )}
                                             </div>
@@ -683,7 +685,8 @@ export default function Room({ currentUser, onLogin, onForgotPassword, setToolti
                         <p className="room__lead">{matched.overview}</p>
                         {matched.poster && <img className="room__match-poster" src={matched.poster} alt={matched.title} />}
                         <div className="room__watch">
-                            <Button variant="glass" size="xl" onClick={toggleWatchProviders}>
+                            <Button variant="glass" size="xl" className="room__watch-toggle" onClick={toggleWatchProviders}>
+                                <Play />
                                 Where to Watch
                             </Button>
                             {showWatchProviders && (

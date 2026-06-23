@@ -328,8 +328,46 @@
   backdrop-filter: blur(14px);
   box-shadow: var(--shadow-card);
 }
-.room__details-panel p + p {
-  margin-top: 0.6rem;
+.room__details-kicker {
+  color: hsl(var(--accent));
+  font-size: 0.72rem;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  margin-bottom: 0.75rem;
+  text-transform: uppercase;
+}
+.room__details-section {
+  display: grid;
+  gap: 0.35rem;
+}
+.room__details-section + .room__details-section {
+  margin-top: 0.8rem;
+  padding-top: 0.8rem;
+  border-top: 1px solid rgb(255 255 255 / 0.1);
+}
+.room__details-label {
+  color: rgb(255 255 255 / 0.58);
+  font-size: 0.72rem;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.room__cast-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+.room__cast-chip {
+  display: inline-flex;
+  align-items: center;
+  min-height: 1.8rem;
+  border: 1px solid rgb(255 255 255 / 0.13);
+  border-radius: 9999px;
+  background: rgb(255 255 255 / 0.08);
+  color: rgb(255 255 255 / 0.9);
+  font-size: 0.78rem;
+  font-weight: 800;
+  padding: 0.35rem 0.65rem;
 }
 .room__movie-info {
   position: absolute;
@@ -462,6 +500,17 @@
 .room__watch {
   margin-top: 1.25rem;
 }
+.room__watch-toggle {
+  min-width: min(100%, 18rem);
+  border-color: hsl(var(--accent) / 0.35);
+  background:
+    linear-gradient(rgb(255 255 255 / 0.1), rgb(255 255 255 / 0.04)),
+    rgb(255 255 255 / 0.05);
+  box-shadow: 0 18px 42px -26px hsl(var(--accent) / 0.75);
+}
+.room__watch-toggle:hover {
+  border-color: hsl(var(--accent) / 0.58);
+}
 .room__watch-panel {
   display: grid;
   gap: 0.65rem;
@@ -473,13 +522,17 @@
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  padding: 0.7rem 0.85rem;
+  min-height: 3.7rem;
+  padding: 0.72rem 0.85rem;
   border-radius: 0.8rem;
-  background: rgb(255 255 255 / 0.05);
-  border: 1px solid rgb(255 255 255 / 0.08);
+  background:
+    linear-gradient(135deg, rgb(255 255 255 / 0.1), rgb(255 255 255 / 0.035)),
+    rgb(10 8 16 / 0.72);
+  border: 1px solid rgb(255 255 255 / 0.1);
   color: hsl(var(--foreground));
   font-weight: 800;
   transition: var(--transition-smooth);
+  box-shadow: 0 16px 34px -28px hsl(var(--accent) / 0.75);
 }
 .room__provider:hover {
   border-color: hsl(var(--accent) / 0.45);
@@ -509,4 +562,114 @@
   flex-direction: column;
   gap: 1rem;
   align-items: center;
+}
+
+@media (max-width: 640px) {
+  .room-page {
+    padding-top: 4.5rem;
+    padding-bottom: 2rem;
+  }
+
+  .room {
+    width: min(100%, 26rem);
+  }
+
+  .room__panel {
+    border-radius: 1rem;
+    padding: 1.15rem;
+  }
+
+  .room__panel--center {
+    overflow: hidden;
+  }
+
+  .room__deck {
+    width: min(100%, 21.5rem);
+    height: min(118vw, 520px);
+    max-height: 520px;
+  }
+
+  .room__movie {
+    border-radius: 1.45rem;
+  }
+
+  .room__movie-info {
+    padding: 1rem;
+  }
+
+  .room__movie-title {
+    font-size: 1.35rem;
+  }
+
+  .room__details-panel {
+    left: 0.75rem;
+    right: 0.75rem;
+    top: 3.85rem;
+    max-height: calc(100% - 5rem);
+    overflow-y: auto;
+    border-radius: 1.1rem;
+    background:
+      linear-gradient(180deg, rgb(38 30 50 / 0.94), rgb(8 7 13 / 0.94)),
+      rgb(8 7 13 / 0.94);
+    border-color: hsl(var(--accent) / 0.22);
+    box-shadow:
+      0 24px 70px -34px hsl(var(--accent) / 0.9),
+      0 16px 42px -26px rgb(0 0 0 / 0.9);
+  }
+
+  .room__cast-list {
+    gap: 0.4rem;
+  }
+
+  .room__cast-chip {
+    max-width: 100%;
+    font-size: 0.76rem;
+  }
+
+  .room__match-emoji {
+    font-size: 3rem;
+  }
+
+  .room__match-poster {
+    width: min(58vw, 190px);
+    max-width: none;
+    border-radius: 1rem;
+    border: 1px solid rgb(255 255 255 / 0.12);
+  }
+
+  .room__watch {
+    width: 100%;
+  }
+
+  .room__watch-toggle {
+    width: 100%;
+    min-width: 0;
+    height: 3.45rem;
+    border-radius: 1rem;
+  }
+
+  .room__watch-panel {
+    width: 100%;
+    max-width: none;
+  }
+
+  .room__provider {
+    border-radius: 1rem;
+    min-height: 4rem;
+    padding: 0.75rem 0.85rem;
+  }
+
+  .room__provider img {
+    width: 2.35rem;
+    height: 2.35rem;
+    border-radius: 0.7rem;
+  }
+
+  .room__actions-center {
+    width: 100%;
+  }
+
+  .room__actions-center .btn {
+    flex: 1 1 100%;
+  }
 }

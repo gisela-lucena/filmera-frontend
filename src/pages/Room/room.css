@@ -225,6 +225,14 @@
   width: 1rem;
   height: 1rem;
 }
+.room__realtime {
+  margin-top: 0.55rem;
+  color: hsl(var(--muted-foreground));
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
 
 .room__actions {
   display: flex;
@@ -279,6 +287,49 @@
     rgb(0 0 0 / 0.2) 55%,
     transparent
   );
+}
+.room__info-button {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  z-index: 6;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 9999px;
+  display: grid;
+  place-items: center;
+  background: rgb(0 0 0 / 0.58);
+  border: 1px solid rgb(255 255 255 / 0.2);
+  color: white;
+  backdrop-filter: blur(10px);
+  transition: var(--transition-smooth);
+}
+.room__info-button:hover {
+  background: rgb(255 255 255 / 0.16);
+  transform: scale(1.05);
+}
+.room__info-button svg {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+.room__details-panel {
+  position: absolute;
+  left: 1rem;
+  right: 1rem;
+  top: 4rem;
+  z-index: 6;
+  background: rgb(0 0 0 / 0.78);
+  border: 1px solid rgb(255 255 255 / 0.14);
+  border-radius: 0.85rem;
+  color: white;
+  padding: 1rem;
+  font-size: 0.85rem;
+  line-height: 1.45;
+  backdrop-filter: blur(14px);
+  box-shadow: var(--shadow-card);
+}
+.room__details-panel p + p {
+  margin-top: 0.6rem;
 }
 .room__movie-info {
   position: absolute;
@@ -407,6 +458,47 @@
   max-width: 220px;
   border-radius: 0.85rem;
   box-shadow: var(--shadow-elegant);
+}
+.room__watch {
+  margin-top: 1.25rem;
+}
+.room__watch-panel {
+  display: grid;
+  gap: 0.65rem;
+  max-width: 360px;
+  margin: 1rem auto 0;
+  text-align: left;
+}
+.room__provider {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.7rem 0.85rem;
+  border-radius: 0.8rem;
+  background: rgb(255 255 255 / 0.05);
+  border: 1px solid rgb(255 255 255 / 0.08);
+  color: hsl(var(--foreground));
+  font-weight: 800;
+  transition: var(--transition-smooth);
+}
+.room__provider:hover {
+  border-color: hsl(var(--accent) / 0.45);
+  background: rgb(255 255 255 / 0.1);
+}
+.room__provider img {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 0.45rem;
+  object-fit: cover;
+  background: white;
+}
+.room__provider span {
+  flex: 1;
+}
+.room__provider svg {
+  width: 1rem;
+  height: 1rem;
+  color: hsl(var(--muted-foreground));
 }
 
 .room__empty {

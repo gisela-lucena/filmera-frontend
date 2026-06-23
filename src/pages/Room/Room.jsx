@@ -1,9 +1,10 @@
 import { useMemo, useState, useEffect, useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { Heart, X, Star, Copy, ArrowLeft, Users, Play } from "lucide-react";
+import { Heart, X, Star, Copy, ArrowLeft, Users, Play, Info, ExternalLink } from "lucide-react";
 import { Button } from "../../components/ui/Button";
 import "./room.css";
 import api from "../../utils/Api.js";
+import { connectRoomRealtime } from "../../utils/roomRealtime.js";
 import Login from "../../components/Login/Login";
 import Register from "../../components/Register/Register";
 
@@ -25,21 +26,68 @@ const SORTS = [
 const YEARS = ["any", ...Array.from({ length: 30 }, (_, i) =>
     String(new Date().getFullYear() - i))];
 
+const STREAMING_PROVIDERS = [
+    { id: 8, name: "Netflix" },
+    { id: 9, name: "Prime Video" },
+    { id: 337, name: "Disney+" },
+    { id: 15, name: "Hulu" },
+    { id: 1899, name: "Max" },
+    { id: 350, name: "Apple TV+" },
+    { id: 531, name: "Paramount+" },
+    { id: 386, name: "Peacock" },
+    { id: 283, name: "Crunchyroll" },
+    { id: 257, name: "fuboTV" },
+    { id: 43, name: "Starz" },
+];
+
+const normalizeRating = (rating) => {
+    if (typeof rating === "string" && rating.endsWith("%")) {
+        return rating;
+    }
+
+    const numericRating = Number(rating);
+    if (!Number.isFinite(numericRating)) {
+        return "N/A";
+    }
+
+    return `${Math.round(Math.max(0, Math.min(numericRating, 10)) * 10)}%`;
+};
+
 const normalizeMovies = (movies = []) =>
     movies.map((movie) => ({
         id: movie.id || movie.tmdbId,
+        tmdbId: movie.tmdbId || movie.id,
         title: movie.title,
         year: movie.year,
-        rating: movie.rating,
+        rating: normalizeRating(movie.rating),
         overview: movie.overview,
         poster: movie.poster || null,
     }));
+
+const getProviderLink = (providerName, movieTitle, fallbackLink) => {
+    const encodedTitle = encodeURIComponent(movieTitle || "");
+    const normalizedName = providerName.toLowerCase();
+
+    if (normalizedName.includes("netflix")) return `https://www.netflix.com/search?q=${encodedTitle}`;
+    if (normalizedName.includes("prime")) return `https://www.primevideo.com/search/ref=atv_nb_sr?phrase=${encodedTitle}`;
+    if (normalizedName.includes("disney")) return `https://www.disneyplus.com/search?q=${encodedTitle}`;
+    if (normalizedName.includes("hulu")) return `https://www.hulu.com/search?q=${encodedTitle}`;
+    if (normalizedName.includes("max")) return `https://www.max.com/search?q=${encodedTitle}`;
+    if (normalizedName.includes("apple")) return `https://tv.apple.com/search?term=${encodedTitle}`;
+    if (normalizedName.includes("paramount")) return `https://www.paramountplus.com/search/?q=${encodedTitle}`;
+    if (normalizedName.includes("peacock")) return `https://www.peacocktv.com/search?q=${encodedTitle}`;
+    if (normalizedName.includes("crunchyroll")) return `https://www.crunchyroll.com/search?q=${encodedTitle}`;
+    if (normalizedName.includes("starz")) return `https://www.starz.com/us/en/search?q=${encodedTitle}`;
+
+    return fallbackLink || `https://www.themoviedb.org/search?query=${encodedTitle}`;
+};
 
 export default function Room({ currentUser, onLogin, onForgotPassword, setTooltip }) {
     const { code: urlCode } = useParams();
     const navigate = useNavigate();
 
     const createdRoomRef = useRef(false);
+    const stageRef = useRef(urlCode ? "waiting" : "lobby");
 
     const [stage, setStage] = useState(urlCode ? "waiting" : "lobby");
     const [code, setCode] = useState(urlCode || "");
@@ -54,12 +102,26 @@ export default function Room({ currentUser, onLogin, onForgotPassword, setToolti
     const [error, setError] = useState("");
 
     const [selectedGenres, setSelectedGenres] = useState([]);
+    const [selectedProviders, setSelectedProviders] = useState([]);
     const [year, setYear] = useState("any");
     const [sort, setSort] = useState("popularity.desc");
     const [isHost, setIsHost] = useState(false);
+    const [detailsMovieId, setDetailsMovieId] = useState(null);
+    const [movieCredits, setMovieCredits] = useState(null);
+    const [movieCreditsLoading, setMovieCreditsLoading] = useState(false);
+    const [movieCreditsError, setMovieCreditsError] = useState("");
+    const [watchProviders, setWatchProviders] = useState([]);
+    const [watchProvidersLoading, setWatchProvidersLoading] = useState(false);
+    const [watchProvidersError, setWatchProvidersError] = useState("");
+    const [showWatchProviders, setShowWatchProviders] = useState(false);
+    const [realtimeStatus, setRealtimeStatus] = useState("disconnected");
 
     const [isLoginOpen, setIsLoginOpen] = useState(!currentUser);
     const [isRegisterOpen, setIsRegisterOpen] = useState(false);
+
+    useEffect(() => {
+        stageRef.current = stage;
+    }, [stage]);
 
     const createRoom = async () => {
         try {
@@ -118,32 +180,53 @@ export default function Room({ currentUser, onLogin, onForgotPassword, setToolti
     }, [urlCode, currentUser]);
 
     useEffect(() => {
-        if (!code || !currentUser || stage === "matched") return;
+        if (!code || !currentUser) return undefined;
 
-        const intervalId = setInterval(async () => {
-            try {
-                const data = await api.getRoom(code);
-                const roomData = data.room || data;
+        const connection = connectRoomRealtime({
+            roomCode: code,
+            onStatus: setRealtimeStatus,
+            onError: (message) => console.error(message),
+            onRoom: (roomData) => {
                 const normalizedMovies = normalizeMovies(roomData.movies || []);
 
                 setParticipants(roomData.participants || []);
 
-                if (normalizedMovies.length && movies.length === 0) {
-                    setMovies(normalizedMovies);
+                if (normalizedMovies.length) {
+                    setMovies((currentMovies) =>
+                        currentMovies.length ? currentMovies : normalizedMovies,
+                    );
+                    if (stageRef.current === "waiting") {
+                        setStage("swiping");
+                    }
                 }
+
                 if (roomData.matchedMovie) {
                     const normalizedMatch = normalizeMovies([roomData.matchedMovie])[0];
 
+                    setShowWatchProviders(false);
+                    setWatchProviders([]);
+                    setWatchProvidersError("");
                     setMatched(normalizedMatch);
                     setStage("matched");
+                } else if (stageRef.current === "matched") {
+                    setMatched(null);
+                    setStage("swiping");
                 }
-            } catch (err) {
-                console.error("Failed to refresh room:", err);
-            }
-        }, 3000);
+            },
+            onMatch: (matchedMovie) => {
+                const normalizedMatch = normalizeMovies([matchedMovie])[0];
+                if (!normalizedMatch) return;
 
-        return () => clearInterval(intervalId);
-    }, [code, currentUser, stage, movies.length]);
+                setShowWatchProviders(false);
+                setWatchProviders([]);
+                setWatchProvidersError("");
+                setMatched(normalizedMatch);
+                setStage("matched");
+            },
+        });
+
+        return () => connection.close();
+    }, [code, currentUser]);
 
     const joinRoom = async () => {
         const roomCode = joinInput.trim().toUpperCase();
@@ -176,6 +259,13 @@ export default function Room({ currentUser, onLogin, onForgotPassword, setToolti
                 : [...currentGenres, id],
         );
     };
+    const toggleProvider = (id) => {
+        setSelectedProviders((currentProviders) =>
+            currentProviders.includes(id)
+                ? currentProviders.filter((providerId) => providerId !== id)
+                : [...currentProviders, id],
+        );
+    };
     const startGame = async () => {
         try {
             setLoading(true);
@@ -183,6 +273,7 @@ export default function Room({ currentUser, onLogin, onForgotPassword, setToolti
 
             const room = await api.updateRoomFilters(code, {
                 genres: selectedGenres,
+                providers: selectedProviders,
                 year,
                 sort,
             });
@@ -218,7 +309,10 @@ export default function Room({ currentUser, onLogin, onForgotPassword, setToolti
                     liked,
                 });
                 if (result.match) {
-                    setMatched(result.match);
+                    setShowWatchProviders(false);
+                    setWatchProviders([]);
+                    setWatchProvidersError("");
+                    setMatched(normalizeMovies([result.match])[0]);
                     setStage("matched");
                 } else {
                     setIndex((currentIndex) => currentIndex + 1);
@@ -246,10 +340,16 @@ export default function Room({ currentUser, onLogin, onForgotPassword, setToolti
         setMatched(null);
         setParticipants([]);
         setIsHost(false);
+        setSelectedProviders([]);
+        setDetailsMovieId(null);
+        setMovieCredits(null);
+        setShowWatchProviders(false);
+        setWatchProviders([]);
         navigate("/room");
     };
 
     const movie = movies[index];
+    const movieId = movie?.tmdbId || movie?.id;
     const hasLongOverview = Boolean(movie?.overview && movie.overview.length > 140);
     const isOverviewExpanded = expandedOverviewMovieId === movie?.id;
 
@@ -268,6 +368,56 @@ export default function Room({ currentUser, onLogin, onForgotPassword, setToolti
         setExpandedOverviewMovieId((currentMovieId) =>
             currentMovieId === movie.id ? null : movie.id
         );
+    };
+
+    const toggleMovieDetails = async () => {
+        if (!movieId) return;
+
+        if (detailsMovieId === movieId) {
+            setDetailsMovieId(null);
+            return;
+        }
+
+        setDetailsMovieId(movieId);
+        setMovieCredits(null);
+        setMovieCreditsError("");
+        setMovieCreditsLoading(true);
+
+        try {
+            const data = await api.getMovieCredits(movieId);
+            setMovieCredits(data.credits || data);
+        } catch (err) {
+            setMovieCreditsError(err.message);
+        } finally {
+            setMovieCreditsLoading(false);
+        }
+    };
+
+    const toggleWatchProviders = async () => {
+        if (!matched) return;
+
+        const nextVisible = !showWatchProviders;
+        setShowWatchProviders(nextVisible);
+
+        if (!nextVisible || watchProviders.length) return;
+
+        const matchedMovieId = matched.tmdbId || matched.id;
+        if (!matchedMovieId) {
+            setWatchProvidersError("Movie ID unavailable.");
+            return;
+        }
+
+        setWatchProvidersLoading(true);
+        setWatchProvidersError("");
+
+        try {
+            const data = await api.getMovieWatchProviders(matchedMovieId);
+            setWatchProviders(data.providers || []);
+        } catch (err) {
+            setWatchProvidersError(err.message);
+        } finally {
+            setWatchProvidersLoading(false);
+        }
     };
 
     if (!currentUser) {
@@ -360,6 +510,18 @@ export default function Room({ currentUser, onLogin, onForgotPassword, setToolti
                             ))}
                         </div>
 
+                        <h3 className="room__h3">Streaming</h3>
+                        <p className="room__muted">Only include movies available on these providers.</p>
+                        <div className="room__chips">
+                            {STREAMING_PROVIDERS.map((provider) => (
+                                <button
+                                    key={provider.id}
+                                    className={`room__chip ${selectedProviders.includes(provider.id) ? "room__chip--on" : ""}`}
+                                    onClick={() => toggleProvider(provider.id)}
+                                >{provider.name}</button>
+                            ))}
+                        </div>
+
                         <div className="room__row">
                             <div className="room__field">
                                 <label className="room__label">Year</label>
@@ -378,6 +540,9 @@ export default function Room({ currentUser, onLogin, onForgotPassword, setToolti
                         <div className="room__participants">
                             <Users /> {participants.length} in room
                         </div>
+                        <p className="room__realtime">
+                            Realtime: {realtimeStatus === "connected" ? "connected" : "reconnecting"}
+                        </p>
 
                         {error && <p className="room__error">{error}</p>}
 
@@ -411,6 +576,9 @@ export default function Room({ currentUser, onLogin, onForgotPassword, setToolti
                                 <div className="room__participants">
                                     <Users /> {participants.length} in room
                                 </div>
+                                <p className="room__realtime">
+                                    Realtime: {realtimeStatus === "connected" ? "connected" : "reconnecting"}
+                                </p>
                                 <button className="room__copy" onClick={copyShare}>
                                     <Copy /> Share link
                                 </button>
@@ -425,6 +593,9 @@ export default function Room({ currentUser, onLogin, onForgotPassword, setToolti
                             <div>
                                 <p className="room__muted">Room</p>
                                 <h2 className="room__code">{code}</h2>
+                                <p className="room__realtime">
+                                    Realtime: {realtimeStatus === "connected" ? "connected" : "reconnecting"}
+                                </p>
                             </div>
                             <div className="room__participants"><Users /> {participants.length}</div>
                         </div>
@@ -442,9 +613,36 @@ export default function Room({ currentUser, onLogin, onForgotPassword, setToolti
                                             ? <img src={movie.poster} alt={movie.title} />
                                             : <div className="room__movie-fallback">🎬</div>}
                                         <div className="room__movie-fade" />
+                                        <button
+                                            className="room__info-button"
+                                            onClick={toggleMovieDetails}
+                                            aria-label="Show movie details"
+                                            title="Movie details"
+                                        >
+                                            <Info />
+                                        </button>
                                         {overlayBadge}
+                                        {detailsMovieId === movieId && (
+                                            <div className="room__details-panel">
+                                                {movieCreditsLoading ? (
+                                                    <p>Loading details...</p>
+                                                ) : movieCreditsError ? (
+                                                    <p>{movieCreditsError}</p>
+                                                ) : (
+                                                    <>
+                                                        <p><strong>Director:</strong> {movieCredits?.director || "Unknown"}</p>
+                                                        <p>
+                                                            <strong>Cast:</strong>{" "}
+                                                            {movieCredits?.cast?.length
+                                                                ? movieCredits.cast.join(", ")
+                                                                : "Not available"}
+                                                        </p>
+                                                    </>
+                                                )}
+                                            </div>
+                                        )}
                                         <div className="room__movie-info">
-                                            <div className="room__meta"><Star /> {movie.rating} • {movie.year}</div>
+                                            <div className="room__meta"><Star /> TMDB {movie.rating} • {movie.year}</div>
                                             <h3 className="room__movie-title">{movie.title}</h3>
                                             <p
                                                 className={`room__movie-overview ${hasLongOverview ? "room__movie-overview--clickable" : ""} ${isOverviewExpanded ? "room__movie-overview--expanded" : ""}`}
@@ -484,6 +682,36 @@ export default function Room({ currentUser, onLogin, onForgotPassword, setToolti
                         <h2 className="room__title">{matched.title}</h2>
                         <p className="room__lead">{matched.overview}</p>
                         {matched.poster && <img className="room__match-poster" src={matched.poster} alt={matched.title} />}
+                        <div className="room__watch">
+                            <Button variant="glass" size="xl" onClick={toggleWatchProviders}>
+                                Where to Watch
+                            </Button>
+                            {showWatchProviders && (
+                                <div className="room__watch-panel">
+                                    {watchProvidersLoading ? (
+                                        <p className="room__muted">Loading providers...</p>
+                                    ) : watchProvidersError ? (
+                                        <p className="room__error">{watchProvidersError}</p>
+                                    ) : watchProviders.length ? (
+                                        watchProviders.map((provider) => (
+                                            <a
+                                                key={provider.id}
+                                                className="room__provider"
+                                                href={getProviderLink(provider.name, matched.title, provider.link)}
+                                                target="_blank"
+                                                rel="noreferrer"
+                                            >
+                                                {provider.logo && <img src={provider.logo} alt="" />}
+                                                <span>{provider.name}</span>
+                                                <ExternalLink />
+                                            </a>
+                                        ))
+                                    ) : (
+                                        <p className="room__muted">No streaming providers found for this region.</p>
+                                    )}
+                                </div>
+                            )}
+                        </div>
                         <div className="room__actions-center">
                             <Button variant="hero" size="xl" onClick={async () => {
                                 try {

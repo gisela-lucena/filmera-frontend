@@ -166,10 +166,13 @@ class Api {
     return this._request(`/movies/${movieId}`);
   }
 
-  getDiscoverMovies({ genres, year, sort } = {}) {
+  getDiscoverMovies({ genres, year, sort, providers } = {}) {
     const params = new URLSearchParams();
     if (genres?.length) {
       params.append("genres", genres.join(","));
+    }
+    if (providers?.length) {
+      params.append("providers", providers.join(","));
     }
     if (year && year !== "any") {
       params.append("year", year);
@@ -184,6 +187,21 @@ class Api {
     return this._request(`/rooms/${roomCode}/match/clear`, {
       method: "PATCH",
     });
+  }
+
+  getMovieCredits(movieId) {
+    return this._request(`/movies/${movieId}/credits`);
+  }
+
+  getMovieWatchProviders(movieId, region) {
+    const params = new URLSearchParams();
+    if (region) {
+      params.append("region", region);
+    }
+
+    return this._request(
+      `/movies/${movieId}/watch-providers${params.toString() ? `?${params.toString()}` : ""}`,
+    );
   }
 }
 

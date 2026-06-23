@@ -249,6 +249,47 @@
   justify-content: center;
 }
 
+.room__panel--match {
+  position: relative;
+  width: min(100%, 26rem);
+  margin: 0 auto;
+  overflow: hidden;
+  border-radius: 1.65rem;
+  padding: 4.4rem 1.15rem 1.15rem;
+  background:
+    linear-gradient(180deg, hsl(270 50% 18% / 0.94), hsl(265 74% 6% / 0.98)),
+    hsl(var(--background));
+  border-color: rgb(255 255 255 / 0.08);
+}
+.room__panel--match::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 20.5rem;
+  width: 20rem;
+  height: 20rem;
+  border-radius: 9999px;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  background: hsl(var(--primary-deep) / 0.7);
+  box-shadow: 0 0 90px hsl(var(--primary-glow) / 0.14);
+}
+.room__panel--match > * {
+  position: relative;
+  z-index: 1;
+}
+.room__panel--match .room__actions-center {
+  width: 100%;
+  margin-top: 1.35rem;
+}
+.room__panel--match .room__actions-center .btn {
+  flex: 1 1 100%;
+  height: 3.85rem;
+  border-radius: 1rem;
+  font-size: 1.05rem;
+  font-weight: 900;
+}
+
 /* Swipe deck */
 .room__deck {
   position: relative;
@@ -486,35 +527,113 @@
   fill: currentColor;
 }
 
+.room__match-header {
+  display: grid;
+  gap: 0.65rem;
+  justify-items: center;
+  margin-bottom: 1.25rem;
+}
 .room__match-emoji {
-  font-size: 3.5rem;
-  margin-bottom: 0.5rem;
+  font-size: 2.35rem;
+  line-height: 1;
+}
+.room__match-title {
+  color: hsl(var(--accent));
+  font-size: clamp(2.2rem, 7vw, 3rem);
+  font-weight: 950;
+  letter-spacing: 0;
+  line-height: 0.95;
+  text-transform: uppercase;
+}
+.room__match-subtitle {
+  color: hsl(var(--muted-foreground));
+  font-size: 1rem;
+  font-weight: 600;
+}
+.room__match-art {
+  position: relative;
+  width: min(100%, 18.2rem);
+  margin: 0 auto;
 }
 .room__match-poster {
   display: block;
-  margin: 1.25rem auto 0;
-  max-width: 220px;
-  border-radius: 0.85rem;
-  box-shadow: var(--shadow-elegant);
+  width: 100%;
+  max-width: none;
+  aspect-ratio: 2 / 3;
+  object-fit: cover;
+  border: 3px solid hsl(var(--accent));
+  border-radius: 1rem;
+  box-shadow:
+    0 0 0 1px hsl(320 80% 70% / 0.55),
+    0 28px 78px -34px hsl(var(--accent) / 0.9);
+}
+.room__match-heart {
+  position: absolute;
+  right: -1rem;
+  bottom: -0.95rem;
+  display: grid;
+  place-items: center;
+  width: 3.9rem;
+  height: 3.9rem;
+  border-radius: 9999px;
+  background: var(--gradient-accent);
+  color: hsl(var(--accent-foreground));
+  box-shadow: var(--shadow-accent-glow);
+}
+.room__match-heart svg {
+  width: 1.75rem;
+  height: 1.75rem;
+  stroke-width: 2.6;
+}
+.room__match-copy {
+  margin-top: 2.2rem;
+}
+.room__match-movie {
+  font-size: clamp(1.9rem, 5vw, 2.35rem);
+  font-weight: 950;
+  line-height: 1.05;
+}
+.room__match-meta {
+  margin-top: 0.75rem;
+  color: hsl(var(--muted-foreground));
+  font-size: 1.05rem;
+  font-weight: 800;
+}
+.room__match-meta strong {
+  color: hsl(var(--accent));
+  font-weight: 950;
 }
 .room__watch {
-  margin-top: 1.25rem;
+  width: 100%;
+  margin-top: 1.6rem;
 }
 .room__watch-toggle {
-  min-width: min(100%, 18rem);
-  border-color: hsl(var(--accent) / 0.35);
-  background:
-    linear-gradient(rgb(255 255 255 / 0.1), rgb(255 255 255 / 0.04)),
-    rgb(255 255 255 / 0.05);
-  box-shadow: 0 18px 42px -26px hsl(var(--accent) / 0.75);
+  width: 100%;
+  min-width: 0;
+  height: 3.85rem;
+  border-radius: 1rem;
+  border-color: hsl(var(--accent) / 0.5);
+  background: rgb(255 255 255 / 0.035);
+  color: hsl(var(--accent));
+  font-size: 1.05rem;
+  font-weight: 900;
+  box-shadow: inset 0 0 0 1px hsl(var(--accent) / 0.12);
 }
 .room__watch-toggle:hover {
   border-color: hsl(var(--accent) / 0.58);
 }
+.room__match-keep {
+  color: hsl(var(--accent-foreground));
+}
+.room__match-leave {
+  background: rgb(255 255 255 / 0.035);
+  border-color: rgb(255 255 255 / 0.12);
+}
 .room__watch-panel {
   display: grid;
   gap: 0.65rem;
-  max-width: 360px;
+  width: 100%;
+  max-width: none;
   margin: 1rem auto 0;
   text-align: left;
 }
@@ -522,9 +641,9 @@
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  min-height: 3.7rem;
-  padding: 0.72rem 0.85rem;
-  border-radius: 0.8rem;
+  min-height: 4rem;
+  padding: 0.75rem 0.85rem;
+  border-radius: 1rem;
   background:
     linear-gradient(135deg, rgb(255 255 255 / 0.1), rgb(255 255 255 / 0.035)),
     rgb(10 8 16 / 0.72);
@@ -539,9 +658,9 @@
   background: rgb(255 255 255 / 0.1);
 }
 .room__provider img {
-  width: 2rem;
-  height: 2rem;
-  border-radius: 0.45rem;
+  width: 2.35rem;
+  height: 2.35rem;
+  border-radius: 0.7rem;
   object-fit: cover;
   background: white;
 }
@@ -577,6 +696,10 @@
   .room__panel {
     border-radius: 1rem;
     padding: 1.15rem;
+  }
+
+  .room__panel--match {
+    padding: 4.4rem 1.15rem 1.15rem;
   }
 
   .room__panel--center {

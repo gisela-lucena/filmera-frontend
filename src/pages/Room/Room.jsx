@@ -1,6 +1,6 @@
 import { useMemo, useState, useEffect, useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { Heart, X, Star, Copy, ArrowLeft, Users, Play, Info, ExternalLink } from "lucide-react";
+import { Heart, X, Star, Copy, ArrowLeft, Users, Play, Info, ExternalLink, RotateCcw, LogOut } from "lucide-react";
 import { Button } from "../../components/ui/Button";
 import "./room.css";
 import api from "../../utils/Api.js";
@@ -678,12 +678,26 @@ export default function Room({ currentUser, onLogin, onForgotPassword, setToolti
                 )}
 
                 {stage === "matched" && matched && (
-                    <div className="room__panel room__panel--center">
-                        <div className="room__match-emoji">🎉</div>
-                        <p className="room__muted">It's a match!</p>
-                        <h2 className="room__title">{matched.title}</h2>
-                        <p className="room__lead">{matched.overview}</p>
-                        {matched.poster && <img className="room__match-poster" src={matched.poster} alt={matched.title} />}
+                    <div className="room__panel room__panel--center room__panel--match">
+                        <div className="room__match-header">
+                            <div className="room__match-emoji">🎉</div>
+                            <h2 className="room__match-title">It's a match</h2>
+                            <p className="room__match-subtitle">
+                                {(currentUser?.name || "You")} & your partner both liked it
+                            </p>
+                        </div>
+                        <div className="room__match-art">
+                            {matched.poster && <img className="room__match-poster" src={matched.poster} alt={matched.title} />}
+                            <div className="room__match-heart" aria-hidden="true">
+                                <Heart />
+                            </div>
+                        </div>
+                        <div className="room__match-copy">
+                            <h3 className="room__match-movie">{matched.title}</h3>
+                            <p className="room__match-meta">
+                                {matched.year || "Year unknown"} · <strong>TMDB {matched.rating}</strong>
+                            </p>
+                        </div>
                         <div className="room__watch">
                             <Button variant="glass" size="xl" className="room__watch-toggle" onClick={toggleWatchProviders}>
                                 <Play />
@@ -716,7 +730,7 @@ export default function Room({ currentUser, onLogin, onForgotPassword, setToolti
                             )}
                         </div>
                         <div className="room__actions-center">
-                            <Button variant="hero" size="xl" onClick={async () => {
+                            <Button variant="hero" size="xl" className="room__match-keep" onClick={async () => {
                                 try {
                                     await api.clearMatch(code);
                                     setMatched(null);
@@ -725,9 +739,14 @@ export default function Room({ currentUser, onLogin, onForgotPassword, setToolti
                                 } catch (err) {
                                     setError(err.message);
                                 }
-                            }}>Keep swiping
+                            }}>
+                                <RotateCcw />
+                                Keep swiping
                             </Button>
-                            <Button variant="glass" size="xl" onClick={leaveRoom}>Leave room</Button>
+                            <Button variant="glass" size="xl" className="room__match-leave" onClick={leaveRoom}>
+                                <LogOut />
+                                Leave room
+                            </Button>
                         </div>
                     </div>
                 )}

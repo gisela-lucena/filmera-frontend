@@ -8,7 +8,7 @@ import Privacy from "../../pages/Privacy/Privacy.jsx";
 import ResetPassword from "../../pages/ResetPassword/ResetPassword.jsx";
 import Room from "../../pages/Room/Room.jsx";
 import Terms from "../../pages/Terms/Terms.jsx";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { flushSync } from "react-dom";
 import api from "../../utils/Api.js";
 import ProtectedRoute from "../ProtectedRoute/ProtectedRoute.jsx";
@@ -18,6 +18,7 @@ import logo from "../../images/filmera-logo.png";
 const queryClient = new QueryClient();
 
 const App = () => {
+    const splashVideoRef = useRef(null);
     const [currentUser, setCurrentUser] = useState(null);
     const [isAuthChecked, setIsAuthChecked] = useState(false);
     const [isSplashDone, setIsSplashDone] = useState(false);
@@ -69,24 +70,44 @@ const App = () => {
         checkToken();
     }, []);
 
-    useEffect(() => {
-        const splashTimer = window.setTimeout(() => {
-            setIsSplashDone(true);
-        }, 900);
+    const startSplashVideo = async () => {
+        const video = splashVideoRef.current;
+        if (!video) return;
 
-        return () => window.clearTimeout(splashTimer);
+        try {
+            video.muted = false;
+            await video.play();
+        } catch {
+            video.muted = true;
+            await video.play().catch(() => setIsSplashDone(true));
+        }
+    };
+
+    useEffect(() => {
+        if (!isSplashDone) {
+            startSplashVideo();
+        }
     }, []);
 
     if (!isAuthChecked || !isSplashDone) {
         return (
             <main className="app-splash" aria-label="Loading FILMERA">
-                <div className="app-splash__brand">
-                    <img src={logo} alt="" width={72} height={72} className="app-splash__logo" />
-                    <div className="app-splash__copy">
-                        <p className="app-splash__eyebrow">FILMERA</p>
-                        <h1 className="app-splash__title">Movie night, matched</h1>
-                    </div>
-                </div>
+                <video
+                    ref={splashVideoRef}
+                    className="app-splash__video"
+                    src="/filmera-splash-popcorn.mp4"
+                    autoPlay
+                    playsInline
+                    preload="auto"
+                    onEnded={() => setIsSplashDone(true)}
+                    onError={() => setIsSplashDone(true)}
+                    aria-hidden="true"
+                />
+                <div className="app-splash__shade" aria-hidden="true" />
+                <button className="app-splash__skip" type="button" onClick={() => setIsSplashDone(true)}>
+                    Skip
+                </button>
+                <img src={logo} alt="" width={112} height={112} className="app-splash__watermark-cover" />
                 <div className="app-splash__bar" aria-hidden="true">
                     <span />
                 </div>

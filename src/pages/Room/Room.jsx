@@ -683,7 +683,9 @@ export default function Room({ currentUser, onLogin, onForgotPassword, setToolti
                             <div className="room__match-emoji">🎉</div>
                             <h2 className="room__match-title">It's a match</h2>
                             <p className="room__match-subtitle">
-                                {(currentUser?.name || "You")} & your partner both liked it
+                                {participants.length >= 3
+                                    ? "Everyone in the room liked it"
+                                    : `${currentUser?.name || "You"} & your partner both liked it`}
                             </p>
                         </div>
                         <div className="room__match-art">

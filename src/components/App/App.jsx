@@ -13,12 +13,14 @@ import { flushSync } from "react-dom";
 import api from "../../utils/Api.js";
 import ProtectedRoute from "../ProtectedRoute/ProtectedRoute.jsx";
 import InfoToolTip from "../InfoToolTip/InfoToolTip.jsx";
+import logo from "../../images/filmera-logo.png";
 
 const queryClient = new QueryClient();
 
 const App = () => {
     const [currentUser, setCurrentUser] = useState(null);
     const [isAuthChecked, setIsAuthChecked] = useState(false);
+    const [isSplashDone, setIsSplashDone] = useState(false);
     const [tooltip, setTooltip] = useState({
         isOpen: false,
         isSuccess: false,
@@ -66,9 +68,32 @@ const App = () => {
         };
         checkToken();
     }, []);
-    if (!isAuthChecked) {
-        return null;
+
+    useEffect(() => {
+        const splashTimer = window.setTimeout(() => {
+            setIsSplashDone(true);
+        }, 900);
+
+        return () => window.clearTimeout(splashTimer);
+    }, []);
+
+    if (!isAuthChecked || !isSplashDone) {
+        return (
+            <main className="app-splash" aria-label="Loading FILMERA">
+                <div className="app-splash__brand">
+                    <img src={logo} alt="" width={72} height={72} className="app-splash__logo" />
+                    <div className="app-splash__copy">
+                        <p className="app-splash__eyebrow">FILMERA</p>
+                        <h1 className="app-splash__title">Movie night, matched</h1>
+                    </div>
+                </div>
+                <div className="app-splash__bar" aria-hidden="true">
+                    <span />
+                </div>
+            </main>
+        );
     }
+
     return (
         <QueryClientProvider client={queryClient}>
             <BrowserRouter>

@@ -5,6 +5,7 @@ import { Button } from "../../components/ui/Button";
 import "./room.css";
 import api from "../../utils/Api.js";
 import { connectRoomRealtime } from "../../utils/roomRealtime.js";
+import { emitFavoritesUpdated, FAVORITES_UPDATED_EVENT, getMovieFavoriteId, normalizeFavoriteMovies } from "../../utils/favorites.js";
 import Login from "../../components/Login/Login";
 import Register from "../../components/Register/Register";
 
@@ -60,6 +61,7 @@ const normalizeMovies = (movies = []) =>
         title: movie.title,
         year: movie.year,
         rating: normalizeRating(movie.rating),
+        certification: movie.certification || movie.contentRating || "",
         overview: movie.overview,
         poster: movie.poster || null,
     }));
@@ -115,6 +117,8 @@ export default function Room({ currentUser, onLogin, onForgotPassword, setToolti
     const [watchProvidersError, setWatchProvidersError] = useState("");
     const [showWatchProviders, setShowWatchProviders] = useState(false);
     const [realtimeStatus, setRealtimeStatus] = useState("disconnected");
+    const [favoriteMovieIds, setFavoriteMovieIds] = useState([]);
+    const [favoritesLoading, setFavoritesLoading] = useState(false);
 
     const [isLoginOpen, setIsLoginOpen] = useState(!currentUser);
     const [isRegisterOpen, setIsRegisterOpen] = useState(false);
@@ -350,8 +354,32 @@ export default function Room({ currentUser, onLogin, onForgotPassword, setToolti
 
     const movie = movies[index];
     const movieId = movie?.tmdbId || movie?.id;
+    const isCurrentMovieFavorite = Boolean(movieId && favoriteMovieIds.includes(String(movieId)));
     const hasLongOverview = Boolean(movie?.overview && movie.overview.length > 140);
     const isOverviewExpanded = expandedOverviewMovieId === movie?.id;
+
+    useEffect(() => {
+        const refreshFavorites = async () => {
+            if (!currentUser) {
+                setFavoriteMovieIds([]);
+                return;
+            }
+
+            try {
+                const data = await api.getFavoriteMovies();
+                setFavoriteMovieIds(normalizeFavoriteMovies(data.favorites || data).map(getMovieFavoriteId));
+            } catch {
+                setFavoriteMovieIds([]);
+            }
+        };
+
+        refreshFavorites();
+        window.addEventListener(FAVORITES_UPDATED_EVENT, refreshFavorites);
+
+        return () => {
+            window.removeEventListener(FAVORITES_UPDATED_EVENT, refreshFavorites);
+        };
+    }, [currentUser]);
 
     useEffect(() => {
         movies.slice(index, index + 4).forEach((nextMovie) => {
@@ -393,6 +421,34 @@ export default function Room({ currentUser, onLogin, onForgotPassword, setToolti
         }
     };
 
+    const toggleFavorite = async () => {
+        if (!movie || favoritesLoading) return;
+
+        setFavoritesLoading(true);
+        try {
+            const data = isCurrentMovieFavorite
+                ? await api.removeFavoriteMovie(movieId)
+                : await api.addFavoriteMovie(movie);
+            const favorites = normalizeFavoriteMovies(data.favorites || data);
+
+            setFavoriteMovieIds(favorites.map(getMovieFavoriteId));
+            emitFavoritesUpdated();
+            setTooltip?.({
+                isOpen: true,
+                isSuccess: true,
+                message: isCurrentMovieFavorite ? "Removed from favorites." : "Added to favorites.",
+            });
+        } catch (err) {
+            setTooltip?.({
+                isOpen: true,
+                isSuccess: false,
+                message: err.message || "Could not update favorites.",
+            });
+        } finally {
+            setFavoritesLoading(false);
+        }
+    };
+
     const toggleWatchProviders = async () => {
         if (!matched) return;
 
@@ -419,6 +475,39 @@ export default function Room({ currentUser, onLogin, onForgotPassword, setToolti
             setWatchProvidersLoading(false);
         }
     };
+
+    useEffect(() => {
+        if (stage !== "matched" || !matched) return;
+
+        const matchedMovieId = matched.tmdbId || matched.id;
+        if (!matchedMovieId) return;
+
+        let ignore = false;
+        setMovieCredits(null);
+        setMovieCreditsError("");
+        setMovieCreditsLoading(true);
+
+        api.getMovieCredits(matchedMovieId)
+            .then((data) => {
+                if (!ignore) {
+                    setMovieCredits(data.credits || data);
+                }
+            })
+            .catch((err) => {
+                if (!ignore) {
+                    setMovieCreditsError(err.message);
+                }
+            })
+            .finally(() => {
+                if (!ignore) {
+                    setMovieCreditsLoading(false);
+                }
+            });
+
+        return () => {
+            ignore = true;
+        };
+    }, [stage, matched]);
 
     if (!currentUser) {
         return (
@@ -611,6 +700,15 @@ export default function Room({ currentUser, onLogin, onForgotPassword, setToolti
                                         >
                                             <Info />
                                         </button>
+                                        <button
+                                            className={`room__favorite-button ${isCurrentMovieFavorite ? "room__favorite-button--on" : ""}`}
+                                            onClick={toggleFavorite}
+                                            disabled={favoritesLoading}
+                                            aria-label={isCurrentMovieFavorite ? "Remove from favorites" : "Save to favorites"}
+                                            title={isCurrentMovieFavorite ? "Remove from favorites" : "Save to favorites"}
+                                        >
+                                            <Star />
+                                        </button>
                                         {overlayBadge}
                                         {detailsMovieId === movieId && (
                                             <div className="room__details-panel">
@@ -624,6 +722,15 @@ export default function Room({ currentUser, onLogin, onForgotPassword, setToolti
                                                         <div className="room__details-section">
                                                             <span className="room__details-label">Director</span>
                                                             <strong>{movieCredits?.director || "Unknown"}</strong>
+                                                        </div>
+                                                        <div className="room__details-section">
+                                                            <span className="room__details-label">Rating</span>
+                                                            <strong>
+                                                                {movieCredits?.certification ||
+                                                                    movieCredits?.contentRating ||
+                                                                    movie?.certification ||
+                                                                    "Not rated"}
+                                                            </strong>
                                                         </div>
                                                         <div className="room__details-section">
                                                             <span className="room__details-label">Cast</span>
@@ -678,7 +785,7 @@ export default function Room({ currentUser, onLogin, onForgotPassword, setToolti
                 )}
 
                 {stage === "matched" && matched && (
-                    <div className="room__panel room__panel--center room__panel--match">
+                    <div className="room__panel room__panel--match">
                         <div className="room__match-header">
                             <div className="room__match-emoji">🎉</div>
                             <h2 className="room__match-title">It's a match</h2>
@@ -695,43 +802,53 @@ export default function Room({ currentUser, onLogin, onForgotPassword, setToolti
                             </div>
                         </div>
                         <div className="room__match-copy">
-                            <h3 className="room__match-movie">{matched.title}</h3>
-                            <p className="room__match-meta">
-                                {matched.year || "Year unknown"} · <strong>TMDB {matched.rating}</strong>
-                            </p>
+                            <div className="room__match-copy-head">
+                                <h3 className="room__match-movie">{matched.title}</h3>
+                                <p className="room__match-meta">
+                                    {matched.year || "Year unknown"} · <strong>TMDB {matched.rating}</strong>
+                                </p>
+                            </div>
+                            <div className="room__match-details">
+                                {movieCreditsLoading ? (
+                                    <p className="room__muted">Loading details...</p>
+                                ) : movieCreditsError ? (
+                                    <p className="room__error">{movieCreditsError}</p>
+                                ) : (
+                                    <>
+                                        <div className="room__match-detail">
+                                            <span>Director</span>
+                                            <strong>{movieCredits?.director || "Unknown"}</strong>
+                                        </div>
+                                        <div className="room__match-detail">
+                                            <span>Rating</span>
+                                            <strong>
+                                                {movieCredits?.certification ||
+                                                    movieCredits?.contentRating ||
+                                                    matched.certification ||
+                                                    "Not rated"}
+                                            </strong>
+                                        </div>
+                                        <div className="room__match-detail room__match-detail--cast">
+                                            <span>Cast</span>
+                                            <strong>
+                                                {movieCredits?.cast?.length
+                                                    ? movieCredits.cast.join(", ")
+                                                    : "Not available"}
+                                            </strong>
+                                        </div>
+                                    </>
+                                )}
+                            </div>
+                            <div className="room__match-synopsis">
+                                <span>Synopsis</span>
+                                <p>{matched.overview || "No synopsis available."}</p>
+                            </div>
                         </div>
-                        <div className="room__watch">
+                        <div className="room__actions-center">
                             <Button variant="glass" size="xl" className="room__watch-toggle" onClick={toggleWatchProviders}>
                                 <Play />
                                 Where to Watch
                             </Button>
-                            {showWatchProviders && (
-                                <div className="room__watch-panel">
-                                    {watchProvidersLoading ? (
-                                        <p className="room__muted">Loading providers...</p>
-                                    ) : watchProvidersError ? (
-                                        <p className="room__error">{watchProvidersError}</p>
-                                    ) : watchProviders.length ? (
-                                        watchProviders.map((provider) => (
-                                            <a
-                                                key={provider.id}
-                                                className="room__provider"
-                                                href={getProviderLink(provider.name, matched.title, provider.link)}
-                                                target="_blank"
-                                                rel="noreferrer"
-                                            >
-                                                {provider.logo && <img src={provider.logo} alt="" />}
-                                                <span>{provider.name}</span>
-                                                <ExternalLink />
-                                            </a>
-                                        ))
-                                    ) : (
-                                        <p className="room__muted">No streaming providers found for this region.</p>
-                                    )}
-                                </div>
-                            )}
-                        </div>
-                        <div className="room__actions-center">
                             <Button variant="hero" size="xl" className="room__match-keep" onClick={async () => {
                                 try {
                                     await api.clearMatch(code);
@@ -750,6 +867,31 @@ export default function Room({ currentUser, onLogin, onForgotPassword, setToolti
                                 Leave room
                             </Button>
                         </div>
+                        {showWatchProviders && (
+                            <div className="room__watch-panel">
+                                {watchProvidersLoading ? (
+                                    <p className="room__muted">Loading providers...</p>
+                                ) : watchProvidersError ? (
+                                    <p className="room__error">{watchProvidersError}</p>
+                                ) : watchProviders.length ? (
+                                    watchProviders.map((provider) => (
+                                        <a
+                                            key={provider.id}
+                                            className="room__provider"
+                                            href={getProviderLink(provider.name, matched.title, provider.link)}
+                                            target="_blank"
+                                            rel="noreferrer"
+                                        >
+                                            {provider.logo && <img src={provider.logo} alt="" />}
+                                            <span>{provider.name}</span>
+                                            <ExternalLink />
+                                        </a>
+                                    ))
+                                ) : (
+                                    <p className="room__muted">No streaming providers found for this region.</p>
+                                )}
+                            </div>
+                        )}
                     </div>
                 )}
             </div>

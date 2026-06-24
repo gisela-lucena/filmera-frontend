@@ -72,6 +72,32 @@ class Api {
     return this._request("/users/me");
   }
 
+  getFavoriteMovies() {
+    return this._request("/users/me/favorites");
+  }
+
+  addFavoriteMovie(movie) {
+    return this._request("/users/me/favorites", {
+      method: "POST",
+      body: JSON.stringify({
+        id: movie.id || movie.tmdbId,
+        tmdbId: movie.tmdbId || movie.id,
+        title: movie.title,
+        year: movie.year || "",
+        rating: movie.rating || "N/A",
+        certification: movie.certification || movie.contentRating || "",
+        overview: movie.overview || "",
+        poster: movie.poster || "",
+      }),
+    });
+  }
+
+  removeFavoriteMovie(movieId) {
+    return this._request(`/users/me/favorites/${movieId}`, {
+      method: "DELETE",
+    });
+  }
+
   createRoom({ filters } = {}) {
     const body = filters ? { filters } : {};
 

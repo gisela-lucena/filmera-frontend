@@ -442,7 +442,9 @@ export default function Room({ currentUser, onLogin, onForgotPassword, setToolti
             setTooltip?.({
                 isOpen: true,
                 isSuccess: false,
-                message: err.message || "Could not update favorites.",
+                message: err.message === "Error: 404"
+                    ? "Favorites are not available on this server yet."
+                    : err.message || "Could not update favorites.",
             });
         } finally {
             setFavoritesLoading(false);

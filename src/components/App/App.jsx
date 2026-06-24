@@ -22,6 +22,7 @@ const App = () => {
     const [currentUser, setCurrentUser] = useState(null);
     const [isAuthChecked, setIsAuthChecked] = useState(false);
     const [isSplashDone, setIsSplashDone] = useState(false);
+    const [shouldShowSplash, setShouldShowSplash] = useState(true);
     const [tooltip, setTooltip] = useState({
         isOpen: false,
         isSuccess: false,
@@ -70,6 +71,21 @@ const App = () => {
         checkToken();
     }, []);
 
+    useEffect(() => {
+        const mediaQuery = window.matchMedia("(min-width: 768px)");
+        const syncSplashPreference = () => {
+            setShouldShowSplash(mediaQuery.matches);
+            if (!mediaQuery.matches) {
+                setIsSplashDone(true);
+            }
+        };
+
+        syncSplashPreference();
+        mediaQuery.addEventListener("change", syncSplashPreference);
+
+        return () => mediaQuery.removeEventListener("change", syncSplashPreference);
+    }, []);
+
     const startSplashVideo = async () => {
         const video = splashVideoRef.current;
         if (!video) return;
@@ -84,12 +100,12 @@ const App = () => {
     };
 
     useEffect(() => {
-        if (!isSplashDone) {
+        if (shouldShowSplash && !isSplashDone) {
             startSplashVideo();
         }
-    }, []);
+    }, [shouldShowSplash, isSplashDone]);
 
-    if (!isAuthChecked || !isSplashDone) {
+    if (!isAuthChecked || (shouldShowSplash && !isSplashDone)) {
         return (
             <main className="app-splash" aria-label="Loading FILMERA">
                 <video

@@ -110,15 +110,15 @@ button {
 
 .app-splash__watermark-cover {
   position: absolute;
-  right: clamp(1.1rem, 3vw, 2.7rem);
-  bottom: clamp(3.3rem, 6vw, 5.3rem);
+  right: clamp(0.35rem, 1.8vw, 1.2rem);
+  bottom: clamp(0.35rem, 1.8vw, 1.2rem);
   z-index: 2;
-  width: clamp(6.5rem, 12vw, 9rem);
-  height: clamp(6.5rem, 12vw, 9rem);
-  padding: 0.45rem;
+  width: clamp(8.25rem, 16vw, 13rem);
+  height: clamp(8.25rem, 16vw, 13rem);
+  padding: 0.75rem;
   border: 1px solid rgb(255 255 255 / 0.12);
-  border-radius: 1.25rem;
-  background: rgb(9 4 16 / 0.72);
+  border-radius: 1.35rem;
+  background: rgb(9 4 16 / 0.9);
   box-shadow: 0 18px 46px -22px hsl(var(--accent) / 0.85);
   object-fit: contain;
   backdrop-filter: blur(14px);
@@ -157,9 +157,10 @@ button {
 
 @media (max-width: 520px) {
   .app-splash__watermark-cover {
-    bottom: 4.2rem;
-    width: 6.25rem;
-    height: 6.25rem;
+    right: 0.6rem;
+    bottom: 0.6rem;
+    width: 7.75rem;
+    height: 7.75rem;
     border-radius: 1rem;
   }
 }

@@ -28,7 +28,11 @@ const Navbar = ({ currentUser, onLogin, onForgotPassword, onLogout, shouldOpenLo
                 const data = await api.getFavoriteMovies();
                 setFavoriteMovies(normalizeFavoriteMovies(data.favorites || data));
             } catch (err) {
-                setFavoritesError(err.message || "Could not load favorites.");
+                setFavoritesError(
+                    err.message === "Error: 404"
+                        ? "Favorites are not available on this server yet."
+                        : err.message || "Could not load favorites.",
+                );
             }
         };
 
@@ -59,7 +63,11 @@ const Navbar = ({ currentUser, onLogin, onForgotPassword, onLogout, shouldOpenLo
             setFavoriteMovies(normalizeFavoriteMovies(data.favorites || data));
             emitFavoritesUpdated();
         } catch (err) {
-            setFavoritesError(err.message || "Could not remove favorite.");
+            setFavoritesError(
+                err.message === "Error: 404"
+                    ? "Favorites are not available on this server yet."
+                    : err.message || "Could not remove favorite.",
+            );
         }
     };
 
